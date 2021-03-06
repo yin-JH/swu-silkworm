@@ -19,7 +19,7 @@ public class DataSetReader {
      * @param：String resourceName
      * @return：List<Question>
      * @throws: IOException
-     * @description: 这是武胜老师提供的excel接口，现已废弃，转用MySql数据库的接口
+     * @description: 这是伍胜老师提供的excel接口，现已废弃，转用MySql数据库的接口
      */
     public List<Question> read(String resourceName) throws IOException {
         List<Question> questions = new ArrayList<>();

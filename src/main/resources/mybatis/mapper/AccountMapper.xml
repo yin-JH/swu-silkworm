@@ -4,7 +4,7 @@
 <mapper namespace="cn.edu.swu.mapper.AccountMapper">
     <resultMap id="AccountResultMap" type="cn.edu.swu.entity.Account">
         <result column="id" property="id"/>
-        <result column="account_name" property="AccountName"/>
+        <result column="account_name" property="accountName"/>
         <result column="account_password" property="accountPassword"/>
     </resultMap>
 
