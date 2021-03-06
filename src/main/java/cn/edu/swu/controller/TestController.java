@@ -17,6 +17,6 @@ public class TestController {
     @ResponseBody
     public String AddQuestionFromExcelToMySql(){
         testService.AddQuestionFromExcelToMySql();
-        return "ok";
+        return "Ok!";
     }
 }
