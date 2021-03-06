@@ -19,25 +19,7 @@ class SwuChatbotApplicationTests {
 
     @Test
     void contextLoads() throws IOException {
-        DataSetReader dataSetReader = new DataSetReader();
-        List<Question> questions = dataSetReader.read("excel/silkworm-faq.xlsx");
 
-        for (Question question : questions) {
-            List<String> keywords = question.getKeywords();
-            String originalKeywords = "";
-
-            for (String keyword : keywords) {
-                originalKeywords += keyword + "|";
-            }
-
-            question.setOriginalKeywords(originalKeywords);
-        }
-
-        for (Question question : questions) {
-            questionMap.saveQuestion(question);
-        }
-
-        System.out.println(questions);
     }
 
 }
