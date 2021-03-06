@@ -1,11 +1,12 @@
 package cn.edu.swu;
-import	java.util.ArrayList;
+
 import	java.io.StringReader;
 
 
 import cn.edu.swu.entity.Question;
 import cn.edu.swu.mapper.QuestionMapper;
 
+import cn.edu.swu.service.AskQuestionsService;
 import cn.edu.swu.utils.NLPUtil;
 import cn.edu.swu.utils.QuestionsHandler;
 import cn.edu.swu.utils.TermFilter;
@@ -29,6 +30,9 @@ class SwuChatbotApplicationTests {
 
     @Autowired
     QuestionMapper questionMap;
+
+    @Autowired
+    AskQuestionsService askQuestionsService;
 
     @Test
     void contextLoads() throws IOException {
@@ -62,7 +66,7 @@ class SwuChatbotApplicationTests {
         Segment nShortSegment = new NShortSegment().enableCustomDictionary(false).enablePlaceRecognize(true).enableOrganizationRecognize(true);
         Segment shortestSegment = new DijkstraSegment().enableCustomDictionary(false).enablePlaceRecognize(true).enableOrganizationRecognize(true);
 
-        List<Term> seg = nShortSegment.seg("蚕卵是否滞育的取决因素");
+        List<Term> seg = shortestSegment.seg("3龄蚕有多大");
 
         System.out.println(seg);
 
@@ -126,5 +130,10 @@ class SwuChatbotApplicationTests {
         System.err.println(QuestionsHandler.getQuestions().size());
 
         System.out.println(QuestionsHandler.getQuestions());
+    }
+
+    @Test
+    void TestAskOneQuestionInterface(){
+        askQuestionsService.askOneQ("蚕宝宝感染病毒病有哪些");
     }
 }
