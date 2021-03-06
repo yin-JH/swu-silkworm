@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v0.01/askOnWeb")
+@RequestMapping("/api/v0.01/askOnWeb")
 public class AskQuestionsController {
 
     @Autowired
