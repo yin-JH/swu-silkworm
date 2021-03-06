@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.swu.mapper.AccountMapper">
+    <resultMap id="AccountResultMap" type="cn.edu.swu.entity.Account">
+        <result column="id" property="id"/>
+        <result column="account_name" property="AccountName"/>
+        <result column="account_password" property="accountPassword"/>
+    </resultMap>
+
+    <select id="getOneAccount" resultMap="AccountResultMap">
+        SELECT *
+        FROM account
+        WHERE account_name = #{accountName} AND account_password = #{accountPassword}
+    </select>
+</mapper>
