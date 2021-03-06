@@ -17,6 +17,8 @@ public class TestController {
     @ResponseBody
     public String AddQuestionFromExcelToMySql(){
         testService.AddQuestionFromExcelToMySql();
+        System.out.println("now ready");
+        System.out.println("========");
         return "Ok!";
     }
 }
