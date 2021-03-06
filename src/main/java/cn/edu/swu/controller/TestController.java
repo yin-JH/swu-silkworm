@@ -13,12 +13,17 @@ public class TestController {
     @Autowired
     TestService testService;
 
-    @RequestMapping("/AddQuestionFromExcelToMySql")
+    /*@RequestMapping("/AddQuestionFromExcelToMySql")
     @ResponseBody
     public String AddQuestionFromExcelToMySql(){
         testService.AddQuestionFromExcelToMySql();
+<<<<<<< HEAD
         System.out.println("now ready");
         System.out.println("========");
         return "Ok!";
     }
+=======
+        return "ok";
+    }*/
+
 }

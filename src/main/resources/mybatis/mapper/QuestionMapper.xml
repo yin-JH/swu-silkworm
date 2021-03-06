@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
 <mapper namespace="cn.edu.swu.mapper.QuestionMapper">
     <resultMap id="QuestionResultMap" type="cn.edu.swu.entity.Question">
         <result column="id" property="id"/>
@@ -25,4 +27,16 @@
           #{question.answer}
         )
     </insert>
+
+    <update id="updateQuestionKeywords">
+        UPDATE question
+        SET keywords = #{keywords}
+        where id = #{id}
+    </update>
+
+    <update id="updateProblem">
+        UPDATE question
+        SET problem = #{problem}
+        where id = #{id}
+    </update>
 </mapper>

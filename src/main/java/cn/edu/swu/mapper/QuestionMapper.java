@@ -13,4 +13,8 @@ public interface QuestionMapper {
     public List<Question> getAllQuestions();
 
     public void saveQuestion(@Param("question") Question question);
+
+    public void updateQuestionKeywords(@Param("id") Long id, @Param("keywords") String keywords);
+
+    void updateProblem(@Param("id") Long id, @Param("problem") String problem);
 }
