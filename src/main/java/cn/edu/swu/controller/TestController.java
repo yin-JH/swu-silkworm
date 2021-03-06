@@ -13,10 +13,10 @@ public class TestController {
     @Autowired
     TestService testService;
 
-    @RequestMapping("/AddQuestionFromExcelToMySql")
+    /*@RequestMapping("/AddQuestionFromExcelToMySql")
     @ResponseBody
     public String AddQuestionFromExcelToMySql(){
         testService.AddQuestionFromExcelToMySql();
         return "ok";
-    }
+    }*/
 }
