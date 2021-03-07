@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 
 import java.lang.reflect.Executable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -34,6 +35,12 @@ public class QuestionsHandler {
 
     private static void loadQuestions(){
         questions = questionMapper.getAllQuestions();
+
+        //所有question读出来之后，要将originalKeywords转换为keywords，即按照 | 将之切分出来
+        for (Question question : questions) {
+            String[] split = question.getOriginalKeywords().split("\\|");
+            question.setKeywords(Arrays.asList(split));
+        }
     }
 
     public static List<Question> getQuestions() {

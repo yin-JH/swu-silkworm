@@ -1,8 +1,17 @@
 package cn.edu.swu.service;
 
+import cn.edu.swu.entity.Question;
 import cn.edu.swu.mapper.QuestionMapper;
+import cn.edu.swu.utils.MatchUtil;
+import cn.edu.swu.utils.NLPUtil;
+import cn.edu.swu.utils.QuestionsHandler;
+import cn.edu.swu.utils.TermFilter;
+import com.hankcs.hanlp.seg.common.Term;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AskQuestionsService {
@@ -52,8 +61,22 @@ public class AskQuestionsService {
      * @description: 该方法通过mysql作为数据库进行问题的查找匹配
      */
     public String askOneQ(String question){
-        question = "蚕能不能蜕皮？";
 
-        return null;
+        Question userQuestion = new Question();
+        List<Question> questions = QuestionsHandler.getQuestions();
+
+        //暴力匹配
+        List<Term> termList = NLPUtil.getInstance().segOneQuestion(question);
+        List<String> filteredTermList = TermFilter.getInstance().filterAndReturnStr(termList);
+
+        //将用户提的问题和已经处理好切分完毕的关键词加入到 Question 中
+        userQuestion.setKeywords(filteredTermList);
+
+        //将用户提的问题和数据库中的问题进行匹配
+        List<Question> result = MatchUtil.match(userQuestion, questions);
+
+        //System.out.println(result);
+
+        return "";
     }
 }
