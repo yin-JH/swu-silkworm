@@ -43,34 +43,30 @@ public class MatchUtil {
                 }//第三层循环，循环用户提出问题的所有关键词
             }//第二层循环，循环数据库中某一问题的所有关键词
 
-            //从后往前匹配
-            for(int i = 2; i >= 0; i--){
-                if(windowCount[i] < count && i > 0){
-                    continue;
-                }
-                else if(windowCount[i] < count && i == 0){
-                    windowCount[2] = windowCount[1];
-                    window[2] = window[1];
+            if(count > windowCount[2]){
+                if(count > windowCount[1]){
+                    if(count > windowCount[0]){
+                        //当count位于第一时，所有的后移
+                        windowCount[2] = windowCount[1];
+                        window[2] = window[1];
 
-                    windowCount[1] = windowCount[0];
-                    window[1] = window[0];
+                        windowCount[1] = windowCount[0];
+                        window[1] = window[0];
 
-                    windowCount[0] = count;
-                    window[0] = question;
+                        windowCount[0] = count;
+                        window[0] = question;
+                    }
+                    else{
+                        windowCount[2] = windowCount[1];
+                        window[2] = window[1];
+
+                        windowCount[1] = count;
+                        window[1] = question;
+                    }
                 }
-                else if(windowCount[i] > count && i == 2){
-                    break;
-                }
-                else if(windowCount[i] > count && i ==1){
+                else {
                     windowCount[2] = count;
                     window[2] = question;
-                }
-                else if(windowCount[i] > count && i ==0){
-                    windowCount[2] = windowCount[1];
-                    window[2] = window[1];
-
-                    windowCount[1] = count;
-                    window[1] = question;
                 }
             }
 
@@ -79,12 +75,13 @@ public class MatchUtil {
         List<Question> result = new ArrayList<> ();
 
         for(int i = 0; i < 3; i++){
-            if(window[i] != null)
+            if(window[i] != null && (windowCount[i] > (userQKeywords.size()) / 2)) {
+                /*System.out.println(windowCount[i]);
+                System.out.println(userQKeywords.size());
+                System.err.println(window[i]);*/
                 result.add(window[i]);
+            }
         }
-
-        System.out.println(Arrays.toString(window));
-        System.out.println(Arrays.toString(windowCount));
 
         return result;
     }

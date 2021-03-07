@@ -75,7 +75,7 @@ public class AskQuestionsService {
         //将用户提的问题和数据库中的问题进行匹配
         List<Question> result = MatchUtil.match(userQuestion, questions);
 
-        //System.out.println(result);
+        System.out.println(result);
 
         return "";
     }
