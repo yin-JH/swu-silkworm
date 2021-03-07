@@ -19,7 +19,7 @@ public class NLPUtil {
     private NLPUtil() {
         BufferedReader br = null;
         try {
-            File customDirectoryFile =  ResourceUtils.getFile("classpath:cd/cd.txt");
+            File customDirectoryFile =  new File("src/main/resources/cd/cd.txt");
             br = new BufferedReader(new FileReader(customDirectoryFile));
 
             String word = null;

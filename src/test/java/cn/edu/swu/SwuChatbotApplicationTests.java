@@ -141,7 +141,7 @@ class SwuChatbotApplicationTests {
     void testFilePath(){
         BufferedReader br = null;
         try {
-            File customDirectoryFile =  ResourceUtils.getFile("classpath:cd.cd.txt");
+            File customDirectoryFile =  ResourceUtils.getFile("classpath:cd/cd.txt");
             br = new BufferedReader(new FileReader(customDirectoryFile));
 
             String word = null;

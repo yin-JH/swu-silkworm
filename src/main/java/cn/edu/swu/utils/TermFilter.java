@@ -23,7 +23,7 @@ public class TermFilter {
         BufferedReader br = null;
 
         try {
-            File stopwordsFile =  ResourceUtils.getFile("classpath:cd/sw.txt");
+            File stopwordsFile =  new File("src/main/resources/cd/sw.txt");
             br = new BufferedReader(new FileReader(stopwordsFile));
 
             String word = null;

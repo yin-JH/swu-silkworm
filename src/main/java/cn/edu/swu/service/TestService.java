@@ -2,6 +2,9 @@ package cn.edu.swu.service;
 
 import cn.edu.swu.entity.Question;
 import cn.edu.swu.mapper.QuestionMapper;
+import cn.edu.swu.utils.NLPUtil;
+import cn.edu.swu.utils.TermFilter;
+import com.hankcs.hanlp.seg.common.Term;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,4 +43,25 @@ public class TestService {
 
         System.out.println(questions);
     }*/
+
+    public String test02(){
+        List<Question> allQuestions = questionMapper.getAllQuestions();
+
+        for (Question question : allQuestions) {
+            String q = question.getQuestion();
+
+            List<Term> terms = NLPUtil.getInstance().segOneQuestion(q);
+
+            List<Term> filteredTerms = TermFilter.getInstance().filter(terms);
+
+            String keywords = "";
+
+            for (Term filteredTerm : filteredTerms) {
+                keywords += filteredTerm.word + "|";
+            }
+
+            questionMapper.updateQuestionKeywords(question.getId(), keywords);
+        }
+        return "ok | update";
+    }
 }
