@@ -24,7 +24,7 @@ public class NLPUtil {
 
             String word = null;
             while((word = br.readLine()) != null){
-                System.out.println(word);
+                //System.out.println(word);
                 CustomDictionary.add(word);
             }
 

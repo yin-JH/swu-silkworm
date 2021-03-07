@@ -43,7 +43,7 @@ public class TermFilter {
             }
         }
 
-        System.err.println(stopwords);
+        //System.err.println(stopwords);
     }
 
     private static final TermFilter INSTANCE = new TermFilter();
