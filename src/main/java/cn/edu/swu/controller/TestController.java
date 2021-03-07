@@ -34,7 +34,7 @@ public class TestController {
     @RequestMapping("01")
     @ResponseBody
     public String test01(){
-        String q = "蚕的天敌";
+        String q = "怎样除沙";
         askQuestionsService.askOneQ(q);
         System.err.println("问题 ： " + q);
         return "ok";

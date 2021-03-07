@@ -69,7 +69,7 @@ public class TermFilter {
         for (Term term : terms) {
             //首先进行第一层过滤，过滤掉非n、m、v词性的词
             if(term.nature.startsWith('n') || term.nature.startsWith('m') || term.nature.startsWith('v') || term.nature.startsWith('b'))
-                if(filterFromStopwords(term))//如果停用词set中没有该词，通过
+                if(filterFromStopwords(term) && !result.contains(term))//如果停用词set中没有该词，通过
                     result.add(term);
         }
 
