@@ -1,9 +1,14 @@
 package cn.edu.swu.utils;
 
+import com.hankcs.hanlp.dictionary.CustomDictionary;
 import com.hankcs.hanlp.seg.common.Term;
+import org.springframework.util.ResourceUtils;
 
+import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @className: TermFilter
@@ -13,7 +18,32 @@ import java.util.List;
  */
 public class TermFilter {
     private TermFilter() {
+        stopwords = new HashSet<>();
 
+        BufferedReader br = null;
+
+        try {
+            File stopwordsFile =  ResourceUtils.getFile("classpath:cd/sw.txt");
+            br = new BufferedReader(new FileReader(stopwordsFile));
+
+            String word = null;
+            while((word = br.readLine()) != null){
+                stopwords.add(word);
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.err.println(stopwords);
     }
 
     private static final TermFilter INSTANCE = new TermFilter();
@@ -21,6 +51,8 @@ public class TermFilter {
     public static TermFilter getInstance() {
         return INSTANCE;
     }
+
+    private Set<String> stopwords;
 
     /**
      * @methodName：filter
@@ -35,8 +67,10 @@ public class TermFilter {
         List<Term> result = new ArrayList<>();
 
         for (Term term : terms) {
+            //首先进行第一层过滤，过滤掉非n、m、v词性的词
             if(term.nature.startsWith('n') || term.nature.startsWith('m') || term.nature.startsWith('v') || term.nature.startsWith('b'))
-                result.add(term);
+                if(filterFromStopwords(term))//如果停用词set中没有该词，通过
+                    result.add(term);
         }
 
         return result;
@@ -57,10 +91,16 @@ public class TermFilter {
         List<String> result = new ArrayList<>();
 
         for (Term term : terms) {
+            //首先进行第一层过滤，过滤掉非n、m、v词性的词
             if(term.nature.startsWith('n') || term.nature.startsWith('m') || term.nature.startsWith('v') || term.nature.startsWith('b'))
-                result.add(term.word);
+                if(filterFromStopwords(term))//如果停用词set中没有该词，通过
+                    result.add(term.word);
         }
 
         return result;
+    }
+
+    public boolean filterFromStopwords(Term term){
+        return !stopwords.contains(term.word);
     }
 }

@@ -2,9 +2,9 @@ package cn.edu.swu.service;
 
 import cn.edu.swu.entity.Question;
 import cn.edu.swu.mapper.QuestionMapper;
+import cn.edu.swu.utils.MatchUtil;
 import cn.edu.swu.utils.NLPUtil;
 import cn.edu.swu.utils.QuestionsHandler;
-import cn.edu.swu.utils.SimilarityJudgeUtil;
 import cn.edu.swu.utils.TermFilter;
 import com.hankcs.hanlp.seg.common.Term;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,6 @@ public class AskQuestionsService {
     public String askOneQ(String question){
 
         Question userQuestion = new Question();
-        List<Question> result = new ArrayList<>();
         List<Question> questions = QuestionsHandler.getQuestions();
 
         //暴力匹配
@@ -74,12 +73,9 @@ public class AskQuestionsService {
         userQuestion.setKeywords(filteredTermList);
 
         //将用户提的问题和数据库中的问题进行匹配
-        for (Question dbQ : questions) {
-            if(SimilarityJudgeUtil.judge(userQuestion, dbQ))
-                result.add(dbQ);
-        }
+        List<Question> result = MatchUtil.match(userQuestion, questions);
 
-        System.out.println(result);
+        //System.out.println(result);
 
         return "";
     }

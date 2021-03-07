@@ -1,6 +1,6 @@
 package cn.edu.swu;
 
-import	java.io.StringReader;
+import java.io.*;
 
 
 import cn.edu.swu.entity.Question;
@@ -10,6 +10,7 @@ import cn.edu.swu.service.AskQuestionsService;
 import cn.edu.swu.utils.NLPUtil;
 import cn.edu.swu.utils.QuestionsHandler;
 import cn.edu.swu.utils.TermFilter;
+import com.hankcs.hanlp.dictionary.CustomDictionary;
 import com.hankcs.hanlp.seg.Dijkstra.DijkstraSegment;
 import com.hankcs.hanlp.seg.NShort.NShortSegment;
 import com.hankcs.hanlp.seg.Segment;
@@ -18,10 +19,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import org.springframework.util.ResourceUtils;
 import org.wltea.analyzer.core.IKSegmenter;
 import org.wltea.analyzer.core.Lexeme;
 
-import java.io.IOException;
 import java.util.List;
 
 
@@ -80,9 +81,8 @@ class SwuChatbotApplicationTests {
 
         for (Question question : allQuestions) {
             String q = question.getQuestion();
-            
-            Segment nShortSegment = new NShortSegment().enableCustomDictionary(false).enablePlaceRecognize(true).enableOrganizationRecognize(true);
-            List<Term> terms = nShortSegment.seg(q);
+
+            List<Term> terms = NLPUtil.getInstance().segOneQuestion(q);
 
             List<Term> filteredTerms = TermFilter.getInstance().filter(terms);
 
@@ -135,5 +135,31 @@ class SwuChatbotApplicationTests {
     @Test
     void TestAskOneQuestionInterface(){
         askQuestionsService.askOneQ("蚕宝宝感染病毒病有哪些");
+    }
+
+    @Test
+    void testFilePath(){
+        BufferedReader br = null;
+        try {
+            File customDirectoryFile =  ResourceUtils.getFile("classpath:cd.cd.txt");
+            br = new BufferedReader(new FileReader(customDirectoryFile));
+
+            String word = null;
+            while((word = br.readLine()) != null){
+                System.out.println(word);
+                //CustomDictionary.add(word);
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
