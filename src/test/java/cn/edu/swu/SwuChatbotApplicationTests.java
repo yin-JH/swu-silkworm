@@ -6,6 +6,7 @@ import java.io.*;
 import cn.edu.swu.entity.Question;
 import cn.edu.swu.mapper.QuestionMapper;
 
+import cn.edu.swu.service.AdminService;
 import cn.edu.swu.service.AskQuestionsService;
 import cn.edu.swu.utils.NLPUtil;
 import cn.edu.swu.utils.QuestionsHandler;
@@ -34,6 +35,9 @@ class SwuChatbotApplicationTests {
 
     @Autowired
     AskQuestionsService askQuestionsService;
+
+    @Autowired
+    AdminService adminService;
 
     @Test
     void contextLoads() throws IOException {
@@ -243,6 +247,13 @@ class SwuChatbotApplicationTests {
         //返回json格式
         String res = "";
         res = itemsRetrieve();
+        System.out.println(res);
+    }
+
+    @Test
+    void testRetrieve(){
+
+        String res = adminService.itemsRetrieve();
         System.out.println(res);
     }
 }

@@ -20,6 +20,7 @@ import java.util.Set;
 @Service
 public class AdminService {
 
+    @Autowired
     QuestionMapper questionMap;
 
     /**
