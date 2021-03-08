@@ -12,7 +12,7 @@
     </resultMap>
 
     <select id="getAllQuestions" resultMap="QuestionResultMap">
-        select * from question
+        select * from question where flag != 0
     </select>
 
     <insert id="saveQuestion" parameterType="cn.edu.swu.entity.Question">
@@ -29,12 +29,36 @@
     <update id="updateQuestionKeywords">
         UPDATE question
         SET keywords = #{keywords}
-        where id = #{id}
+        where id = #{id} And flag != 0
     </update>
 
     <update id="updateProblem">
         UPDATE question
         SET problem = #{problem}
-        where id = #{id}
+        where id = #{id} And flag != 0
+    </update>
+
+    <update id="updateFlag">
+        UPDATE question
+        SET flag = #{flag}
+        where id = #{id} And flag != 0
+    </update>
+
+    <update id="updateType">
+        UPDATE question
+        SET `type` = #{type}
+        where id = #{id} And flag != 0
+    </update>
+
+    <update id="updateMediaType">
+        UPDATE question
+        SET media_type = #{mediaType}
+        where id = #{id} And flag != 0
+    </update>
+
+    <update id="updateAnswer">
+        UPDATE question
+        SET answer = #{answer}
+        where id = #{id} And flag != 0
     </update>
 </mapper>

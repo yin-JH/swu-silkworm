@@ -10,11 +10,19 @@ import java.util.List;
 @Mapper
 @Repository
 public interface QuestionMapper {
-    public List<Question> getAllQuestions();
+    List<Question> getAllQuestions();
 
-    public void saveQuestion(@Param("question") Question question);
+    void saveQuestion(@Param("question") Question question);
 
-    public void updateQuestionKeywords(@Param("id") Long id, @Param("keywords") String keywords);
+    void updateQuestionKeywords(@Param("id") Long id, @Param("keywords") String keywords);
 
     void updateProblem(@Param("id") Long id, @Param("problem") String problem);
+
+    void updateFlag(@Param("id") Long id, @Param("flag") int flag);
+
+    void updateType(@Param("id") Long id, @Param("type") String type);
+
+    void updateMediaType(@Param("id") Long id, @Param("media_type") String mediaType);
+
+    void updateAnswer(@Param("id") Long id, @Param("answer") String answer);
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Question {
     private Long id;
+    private int flag;
     private String type;
     private String question;
     private List<String> keywords = new ArrayList<>();
@@ -20,6 +21,14 @@ public class Question {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public int getFlag(){
+        return flag;
+    }
+
+    public void setFlag(int flag){
+        this.flag = flag;
     }
 
     public String getType() {

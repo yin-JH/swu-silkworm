@@ -42,28 +42,27 @@ class SwuChatbotApplicationTests {
 
         Lexeme lexeme = null;
 
-        while ((lexeme = ikSegmenter.next()) != null){
+        while ((lexeme = ikSegmenter.next()) != null) {
             System.out.println(lexeme.getLexemeText());
             System.out.println(lexeme.getLexemeTypeString());
         }
     }
 
     @Test
-    void NLPTest(){
+    void NLPTest() {
         Segment nShortSegment = new NShortSegment().enableCustomDictionary(false).enablePlaceRecognize(true).enableOrganizationRecognize(true);
         Segment shortestSegment = new DijkstraSegment().enableCustomDictionary(false).enablePlaceRecognize(true).enableOrganizationRecognize(true);
         String[] testCase = new String[]{
                 "今天，刘志军案的关键人物,山西女商人丁书苗在市二中院出庭受审。",
                 "刘喜杰石国祥会见吴亚琴先进事迹报告团成员",
         };
-        for (String sentence : testCase)
-        {
+        for (String sentence : testCase) {
             System.out.println("N-最短分词：" + nShortSegment.seg(sentence) + "\n最短路分词：" + shortestSegment.seg(sentence));
         }
     }
 
     @Test
-    void TestSentence(){
+    void TestSentence() {
         Segment nShortSegment = new NShortSegment().enableCustomDictionary(false).enablePlaceRecognize(true).enableOrganizationRecognize(true);
         Segment shortestSegment = new DijkstraSegment().enableCustomDictionary(false).enablePlaceRecognize(true).enableOrganizationRecognize(true);
 
@@ -76,7 +75,7 @@ class SwuChatbotApplicationTests {
     }
 
     @Test
-    void updateAllKeywords(){
+    void updateAllKeywords() {
         List<Question> allQuestions = questionMap.getAllQuestions();
 
         for (Question question : allQuestions) {
@@ -92,25 +91,25 @@ class SwuChatbotApplicationTests {
                 keywords += filteredTerm.word + "|";
             }
 
-            questionMap.updateQuestionKeywords(question.getId(),keywords);
+            questionMap.updateQuestionKeywords(question.getId(), keywords);
 
         }
     }
 
     @Test
-    void removeBiaoDina(){
+    void removeBiaoDina() {
         List<Question> allQuestions = questionMap.getAllQuestions();
-        for(Question question : allQuestions){
+        for (Question question : allQuestions) {
             String q = question.getQuestion();
-            if(q.endsWith("?")|| q.endsWith("？")){
-                q = q.substring(0,q.length() - 1);
+            if (q.endsWith("?") || q.endsWith("？")) {
+                q = q.substring(0, q.length() - 1);
             }
-            questionMap.updateProblem(question.getId(),q);
+            questionMap.updateProblem(question.getId(), q);
         }
     }
 
     @Test
-    void aQServiceTest(){
+    void aQServiceTest() {
         String q = "蚕能不能蜕皮？";
 
         //存储问题的关键词
@@ -125,7 +124,7 @@ class SwuChatbotApplicationTests {
     }
 
     @Test
-    void TestQuestionsHandler(){
+    void TestQuestionsHandler() {
 
         System.err.println(QuestionsHandler.getQuestions().size());
 
@@ -133,19 +132,19 @@ class SwuChatbotApplicationTests {
     }
 
     @Test
-    void TestAskOneQuestionInterface(){
+    void TestAskOneQuestionInterface() {
         askQuestionsService.askOneQ("蚕宝宝感染病毒病有哪些");
     }
 
     @Test
-    void testFilePath(){
+    void testFilePath() {
         BufferedReader br = null;
         try {
-            File customDirectoryFile =  ResourceUtils.getFile("classpath:cd/cd.txt");
+            File customDirectoryFile = ResourceUtils.getFile("classpath:cd/cd.txt");
             br = new BufferedReader(new FileReader(customDirectoryFile));
 
             String word = null;
-            while((word = br.readLine()) != null){
+            while ((word = br.readLine()) != null) {
                 System.out.println(word);
                 //CustomDictionary.add(word);
             }
@@ -161,5 +160,89 @@ class SwuChatbotApplicationTests {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Test
+    void testItemsRetrieve() {
+        List<Question> allQuestions = questionMap.getAllQuestions();
+
+        String allJson = "";
+        String res;
+
+        //返回json格式
+        for (Question q : allQuestions) {
+            allJson += "{\"id\":\"" + q.getId() +
+                    "\",\"problem\":\"" + q.getQuestion() +
+                    "\",\"keywords\":\"" + q.getOriginalKeywords() +
+                    "\",\"type\":\"" + q.getType() +
+                    "\",\"media_type\":\"" + q.getMediaType() +
+                    "\",\"answer\":\"" + q.getAnswer() +
+                    "\"}" + ",";
+        }
+        int len = allJson.length();
+        res = allJson.substring(0, len - 1);
+        System.out.println(res);
+    }
+
+    public String itemsRetrieve() {
+        List<Question> allQuestions = questionMap.getAllQuestions();
+
+        String allJson = "";
+        String res;
+
+        //返回json格式
+        for (Question q : allQuestions) {
+            allJson += "{\"id\":\"" + q.getId() +
+                    "\",\"problem\":\"" + q.getQuestion() +
+                    "\",\"keywords\":\"" + q.getOriginalKeywords() +
+                    "\",\"type\":\"" + q.getType() +
+                    "\",\"media_type\":\"" + q.getMediaType() +
+                    "\",\"answer\":\"" + q.getAnswer() +
+                    "\"}" + ",";
+        }
+        int len = allJson.length();
+        res = allJson.substring(0, len - 1);
+        return res;
+    }
+    @Test
+    void testItemsDelete() {
+        List<Question> allQuestions = questionMap.getAllQuestions();
+        //删除该条目
+        questionMap.updateFlag(4L, 0);
+
+        //返回json格式
+        String res = "";
+        res = itemsRetrieve();
+        System.out.println(res);
+    }
+    @Test
+    void testItemsUpdate() {
+        Long id = 7L;
+        String parameter = "problem";
+        String content = "为什么蚕要蜕皮";
+        switch (parameter) {
+            case "problem":
+                questionMap.updateProblem(id, content);
+                break;
+            case "keywords":
+                questionMap.updateQuestionKeywords(id, content);
+                break;
+            case "type":
+                questionMap.updateType(id, content);
+                break;
+            case "media_type":
+                questionMap.updateMediaType(id, content);
+                break;
+            case "answer":
+                questionMap.updateAnswer(id, content);
+                break;
+            default:
+                System.err.println("数据修改无效!");
+        }
+
+        //返回json格式
+        String res = "";
+        res = itemsRetrieve();
+        System.out.println(res);
     }
 }
