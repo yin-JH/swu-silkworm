@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>主页</title>
 
+    <link rel="stylesheet" th:href="@{/css/webpages.css}">
+    <script th:src="@{/js/webPages.js}" type="text/javascript"></script>
     <!--引入 bootstrap 所需的静态文件-->
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
     <script th:src="@{/js/jquery-3.4.1.min.js}" type="text/javascript"></script>
@@ -11,20 +13,30 @@
     <script th:src="@{/js/bootstrap.bundle.min.js}" type="text/javascript"></script>
 </head>
 <body>
+<div class="navi_bar"></div>
 
-<div class="input-group">
-    <span class="input-group-addon" id="basic-addon1">问题</span>
-    <input id="question_box" type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+<div class="jumbotron">
+    <div class="container">
+        <div style="width: 50%;margin: 0 auto;">
+            <h3>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1" >问题</span>
+                <input id="question_box" type="text" class="form-control" placeholder=" " aria-describedby="basic-addon1">
+            </div>
+            </h3>
+            <a id="submit" class="submit_btn btn btn-success">提交问题</a>
+            <div>
+                <form id="result" type="text"></form>
+            </div>
+        </div>
+    </div>
 </div>
 
-<a id="submit" class="btn btn-success">提交问题</a>
-
-<div>
-    <form id="result" type="text"></form>
-</div>
 
 
 <script type="text/javascript">
+
+    getNavigation();//加载导航栏
 
     $("#submit").click(function () {
         var question = $("#question_box").val();
