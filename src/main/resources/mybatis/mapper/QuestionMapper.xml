@@ -16,7 +16,7 @@
     </select>
 
     <insert id="saveQuestion" parameterType="cn.edu.swu.entity.Question">
-        insert into question(problem,keywords,type,media_type,answer)
+        insert into question(problem,keywords,`type`,media_type,answer)
         values(
           #{question.question},
           #{question.originalKeywords},

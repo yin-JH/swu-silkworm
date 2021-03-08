@@ -32,7 +32,14 @@ public class AdminController {
      */
     @RequestMapping("/retrieve")
     @ResponseBody
-    public String progress(){
+    public String retrieve(){
+        return adminService.itemsRetrieve();
+    }
+
+    @RequestMapping("/updateData")
+    @ResponseBody
+    public String updateDate(String data){
+        System.out.println(data);
         return adminService.itemsRetrieve();
     }
 
