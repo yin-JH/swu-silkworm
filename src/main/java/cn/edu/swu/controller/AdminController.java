@@ -8,5 +8,8 @@ package cn.edu.swu.controller;
  */
 public class AdminController {
 
+    /**
+     * 写入功能
+     */
     //...
 }
