@@ -137,19 +137,32 @@ function edit_one(n) {
             var td = document.createElement("td");
             tr.appendChild(td);
             var id = obj[i].id;
-            td.innerHTML = "<button id="+id+" type=\"submit\" onclick=\"submit_data(id,document.getElementById(\"input_problem\").innerText,document.getElementById(\"input_media_type\").innerText,document.getElementById(\"input_answer\").innerText)\">提交</button>";
+            td.innerHTML = "<button id="+id+" type=\"submit\" onclick=\"submit_data(id)\">提交</button>";
 
         }
     }
 
 }
 
-function submit_data(id,problem,media_type,answer) {
-    var url="";
-    $.ajax(url,{
+function submit_data(id) {
+
+    var problem = document.getElementById("input_problem").value;
+    var media_type = document.getElementById("input_media_type").value;
+    var answer = document.getElementById("input_answer").value;
+    var url="/admin/editdata";
+    var args ={id:id,problem:problem,media_type:media_type,answer:answer};
+    window.alert(id);
+    window.alert(problem)
+    window.alert(media_type)
+    window.alert(answer)
+    $.ajaxSettings.async=false;
+    $.post(url,args,function (res) {if(res=="success"){window.alert("提交成功！")}});
+    $.ajaxSettings.async=true;
+    /*$.ajax(url,{
+        type: "POST",
         async:false,
         dataType:"json",
         data:{"id":id,"problem":problem,"media_type":media_type,"answer":answer},
         success:window.alert("提交成功！")
-    });
+    });*/
 }
