@@ -43,9 +43,11 @@ public class MatchUtil {
                 }//第三层循环，循环用户提出问题的所有关键词
             }//第二层循环，循环数据库中某一问题的所有关键词
 
-            if(count > windowCount[2]){
-                if(count > windowCount[1]){
-                    if(count > windowCount[0]){
+            //System.err.println(((count * 1.00) / dbKeywords.size()));
+
+            if(count > windowCount[2] && (window[2] == null || (((count * 1.00) / dbKeywords.size()) > 0.5))){
+                if(count > windowCount[1] && (window[1] == null || (((count * 1.00) / dbKeywords.size()) > 0.5))){
+                    if(count > windowCount[0] && (window[0] == null || (((count * 1.00) / dbKeywords.size()) > 0.5))){
                         //当count位于第一时，所有的后移
                         windowCount[2] = windowCount[1];
                         window[2] = window[1];
