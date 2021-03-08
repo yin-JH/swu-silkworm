@@ -37,6 +37,59 @@ function getNavigation() {
     $(".navi_bar").html(a);
     /*window.alert(window.location.pathname);*/
     if (window.location.pathname != "/login"){
-        document.getElementById("navi_left").innerHTML="<li class=\"active\"><a href=\"#\">问答界面<span class=\"sr-only\">(current)</span></a></li>\n<li><a href=\"#\">数据管理</a></li>"
+        if(window.location.pathname == "/index"){
+            document.getElementById("navi_left").innerHTML="<li class=\"active\"><a href=\"/index\">问答界面</a></li>\n<li><a href=\"/damin\">数据管理</a></li>"
+        }
+        else if (window.location.pathname == "/admin"){
+            document.getElementById("navi_left").innerHTML="<li><a href=\"/index\">问答界面</a></li>\n<li class=\"active\"><a href=\"/admin\">数据管理</a></li>"
+        }
     }
+}
+
+function get_data_table() {
+    /*  动态生成表格 ↓  */
+    var tbody = document.querySelector("tbody");
+    var i = 1;
+    var str;
+    var url = "...";/*接口地址*/
+    var args = {};
+
+    $.post(url,args,function (res) {
+        /*res='{"id"=1,"problem"="1111","media_type"="123","answer"="123456"}';*/
+        str = '['+res+']';
+
+        console.log(str);
+
+        var obj = JSON.parse(str);
+
+        for(var i = 0;i < obj.length;i++){
+            var tr = document.createElement("tr");
+
+            tbody.appendChild(tr);
+
+            var td = document.createElement("td");
+            tr.appendChild(td);
+            td.innerHTML = 1+i;
+
+            var td = document.createElement("td");
+            tr.appendChild(td);
+            td.innerHTML = obj[i].problem;
+
+            var td = document.createElement("td");
+            tr.appendChild(td);
+            td.innerHTML = obj[i].media_type;
+
+            var td = document.createElement("td");
+            tr.appendChild(td);
+            td.innerHTML = obj[i].answer;
+
+            var td = document.createElement("td");
+            tr.appendChild(td);
+            var id = obj[i].id;
+            td.innerHTML = "<button id=\"btn_edit_" + id + "\" name=\"编辑\">";
+        }
+    });
+
+    /*  动态生成表格 ↑  */
+
 }
