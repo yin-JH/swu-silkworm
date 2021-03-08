@@ -76,6 +76,10 @@ function get_data_table() {/* js 表格数据 */
 
             var td = document.createElement("td");
             tr.appendChild(td);
+            td.innerHTML = obj[i].type;
+
+            var td = document.createElement("td");
+            tr.appendChild(td);
             td.innerHTML = obj[i].media_type;
 
             var td = document.createElement("td");
@@ -128,6 +132,11 @@ function edit_one(n) {
 
             var td = document.createElement("td");
             tr.appendChild(td);
+            td.innerHTML = "<div class=\"input-group\">\n                   <input id=\"input_type\" type=\"text\" class=\"form-control\" value= \""+obj[i].type+"\" aria-describedby=\"basic-addon1\"> </div>";
+
+
+            var td = document.createElement("td");
+            tr.appendChild(td);
             td.innerHTML = "<div class=\"input-group\">\n                   <input id=\"input_media_type\" type=\"text\" class=\"form-control\" value= \""+obj[i].media_type+"\" aria-describedby=\"basic-addon1\"> </div>";
 
             var td = document.createElement("td");
@@ -145,16 +154,16 @@ function edit_one(n) {
 }
 
 function submit_data(id) {
-
+    var type = $("#input_type").val();
     var problem = document.getElementById("input_problem").value;
     var media_type = document.getElementById("input_media_type").value;
     var answer = document.getElementById("input_answer").value;
     var url="/admin/editdata";
-    var args ={id:id,problem:problem,media_type:media_type,answer:answer};
-    window.alert(id);
+    var args ={id:id,problem:problem,type:type,media_type:media_type,answer:answer};
+/*    window.alert(id);
     window.alert(problem)
     window.alert(media_type)
-    window.alert(answer)
+    window.alert(answer)*/
     $.ajaxSettings.async=false;
     $.post(url,args,function (res) {if(res=="success"){window.alert("提交成功！")}});
     $.ajaxSettings.async=true;
