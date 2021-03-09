@@ -28,6 +28,7 @@ public class AdminService {
      * 查询功能 返回所有的有效条目
      */
     public String itemsRetrieve() {
+        //从内存读入
         List<Question> allQuestions = QuestionsHandler.getQuestions();
 
         String allJson = "";

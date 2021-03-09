@@ -67,7 +67,8 @@ public class AdminController {
     @RequestMapping("/delete")
     @ResponseBody
     public String delete(@RequestParam("id") String id,HttpServletRequest request){
-        System.out.println(id);
+        Long newId = Long.parseLong(id);
+        adminService.itemsDelete(newId);
         return "success";
     }
 
