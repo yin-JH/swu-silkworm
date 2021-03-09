@@ -98,6 +98,7 @@ public class Question {
     public String toString() {
         return "Question{" +
                 "id=" + id +
+                ",flag='"+flag+'\'' +
                 ", type='" + type + '\'' +
                 ", question='" + question + '\'' +
                 ", keywords=" + keywords +

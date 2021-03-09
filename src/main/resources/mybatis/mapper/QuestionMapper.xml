@@ -15,6 +15,10 @@
         select * from question where flag != 0
     </select>
 
+    <select id="getMaxId" resultType="java.lang.Long">
+        select max(id) from question
+    </select>
+
     <insert id="saveQuestion" parameterType="cn.edu.swu.entity.Question">
         insert into question(problem,keywords,`type`,media_type,answer)
         values(
@@ -25,6 +29,12 @@
           #{question.answer}
         )
     </insert>
+
+    <update id="updateAll">
+        UPDATE question
+        SET problem = #{problem},keywords=#{keywords},`type` = #{type},media_type = #{media_type},answer = #{answer}
+        where id = #{id} And flag != 0
+    </update>
 
     <update id="updateQuestionKeywords">
         UPDATE question

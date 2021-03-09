@@ -36,21 +36,31 @@ public class AdminController {
      */
     @RequestMapping("/retrieve")
     @ResponseBody
-    public String retrieve(){
+    public String retrieve() {
         return adminService.itemsRetrieve();
     }
 
-    @RequestMapping("/updateData")
+    /*@RequestMapping("/updateData")
     @ResponseBody
     public String updateDate(String data){
         System.out.println(data);
         return adminService.itemsRetrieve();
-    }
+    }*/
 
-    @RequestMapping("/editdata")
+    @RequestMapping("/editData")
     @ResponseBody
-    public String editdata(@RequestParam("id") String id,@RequestParam("problem") String problem,@RequestParam("media_type") String media_type,@RequestParam("answer") String answer, HttpServletRequest request){
-        System.out.println(id+problem);
+    public String editData(@RequestParam("id") String strId,
+                           @RequestParam("problem") String problem,
+                           @RequestParam("type") String type,
+                           @RequestParam("media_type") String media_type,
+                           @RequestParam("answer") String answer, HttpServletRequest request) {
+        Long id = Long.parseLong(strId);
+        if (id == -1L) {
+            adminService.itemAdd(problem,type,media_type,answer);
+        } else {
+            Long newId = Long.parseLong(strId);
+            adminService.itemUpdateAll(newId,problem,type,media_type,answer);
+        }
         return "success";
     }
 

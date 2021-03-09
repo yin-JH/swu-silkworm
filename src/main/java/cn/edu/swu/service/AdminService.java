@@ -2,13 +2,14 @@ package cn.edu.swu.service;
 
 import cn.edu.swu.entity.Question;
 import cn.edu.swu.mapper.QuestionMapper;
+import cn.edu.swu.utils.NLPUtil;
+import cn.edu.swu.utils.QuestionsHandler;
+import cn.edu.swu.utils.TermFilter;
+import com.hankcs.hanlp.seg.common.Term;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Author: Mou
@@ -27,7 +28,7 @@ public class AdminService {
      * 查询功能 返回所有的有效条目
      */
     public String itemsRetrieve() {
-        List<Question> allQuestions = questionMap.getAllQuestions();
+        List<Question> allQuestions = QuestionsHandler.getQuestions();
 
         String allJson = "";
         String res;
@@ -51,45 +52,176 @@ public class AdminService {
      * 删除功能，将相应的条目flag置为0
      * 需要重新返回所有条目
      */
-    public String itemsDelete(Long id) {
-        List<Question> allQuestions = questionMap.getAllQuestions();
+    public void itemsDelete(Long id) {
+        //List<Question> allQuestions = questionMap.getAllQuestions();
         //删除该条目
-        questionMap.updateFlag(id, 0);
+        synchronized (Object.class) {
+            List<Question> loadQuestions = QuestionsHandler.getQuestions();
+            //修改内存中的数据
+            Iterator<Question> it = loadQuestions.iterator();
+            while (it.hasNext()){
+                Question q = it.next();
+                if (q.getId().equals(id)) {
+                    it.remove();
+                }
+            }
+            //修改数据库中的数据
+            questionMap.updateFlag(id, 0);
+        }
 
-        //返回json格式
-        String res = "";
-        res = itemsRetrieve();
-        return res;
+    }
+
+    /**
+     * 增加新条目
+     */
+    public void itemAdd(String problem,
+                          String type,
+                          String media_type,
+                          String answer) {
+
+        synchronized (Object.class) {
+            //获取内存中的数据
+            List<Question> loadQuestions = QuestionsHandler.getQuestions();
+            Long maxId = questionMap.getMaxId();
+            Long newId = maxId + 1L;
+            //为内存中添加新条目
+            Question q = new Question();
+            q.setId(newId);
+            q.setFlag(1);
+            q.setQuestion(problem);
+            q.setType(type);
+            q.setMediaType(media_type);
+            q.setAnswer(answer);
+
+            //切词
+            List<Term> terms = NLPUtil.getInstance().segOneQuestion(problem);
+            List<Term> filteredTerms = TermFilter.getInstance().filter(terms);
+            String keywords = "";
+
+            for (Term filteredTerm : filteredTerms) {
+                keywords += filteredTerm.word + "|";
+            }
+            q.setOriginalKeywords(keywords);
+
+            //添加到内存中
+            loadQuestions.add(q);
+            //添加到数据库中
+            questionMap.saveQuestion(q);
+        }
+
+    }
+    /**
+     * 修改功能，修改所有的条目
+     */
+    public void itemUpdateAll(Long id,
+                           String problem,
+                           String type,
+                           String media_type,
+                           String answer){
+
+        synchronized (Object.class){
+            //切词
+            List<Term> terms = NLPUtil.getInstance().segOneQuestion(problem);
+            List<Term> filteredTerms = TermFilter.getInstance().filter(terms);
+            String keywords = "";
+
+            for (Term filteredTerm : filteredTerms) {
+                keywords += filteredTerm.word + "|";
+            }
+
+            //获取内存中的数据
+            List<Question> loadQuestions = QuestionsHandler.getQuestions();
+            for (Question q : loadQuestions) {
+                if(q.getId().equals(id)){
+                    q.setQuestion(problem);
+                    q.setOriginalKeywords(keywords);
+                    q.setType(type);
+                    q.setMediaType(media_type);
+                    q.setAnswer(answer);
+                }
+            }
+            //获取数据库中的数据
+            List<Question> allQuestions = questionMap.getAllQuestions();
+            for (Question q : allQuestions) {
+                if(q.getId().equals(id)){
+                    questionMap.updateAll(id,problem,keywords,type,media_type,answer);
+                }
+            }
+        }
     }
 
     /**
      * 修改功能，修改相关的条目
      */
-    public String itemsUpdate(Long id, String parameter, String content) {
+    public void itemUpdate(Long id, String parameter, String content) {
+        List<Question> loadQuestions = QuestionsHandler.getQuestions();
         switch (parameter) {
             case "problem":
-                questionMap.updateProblem(id, content);
+                synchronized (Object.class) {
+                    //修改数据库中的数据
+                    questionMap.updateProblem(id, content);
+                    //修改内存中的数据
+                    for (Question q : loadQuestions) {
+                        if (q.getId().equals(id)) {
+                            q.setQuestion(content);
+                        }
+                    }
+                }
                 break;
             case "keywords":
-                questionMap.updateQuestionKeywords(id, content);
+                synchronized (Object.class) {
+                    //修改数据库中的数据
+                    questionMap.updateQuestionKeywords(id, content);
+                    //修改内存中的数据
+                    for (Question q : loadQuestions) {
+                        if (q.getId().equals(id)) {
+                            q.setOriginalKeywords(content);
+                        }
+                    }
+                }
                 break;
             case "type":
-                questionMap.updateType(id, content);
+                synchronized (Object.class) {
+                    //修改数据库中的数据
+                    questionMap.updateType(id, content);
+                    //修改内存中的数据
+                    for (Question q : loadQuestions) {
+                        if (q.getId().equals(id)) {
+                            q.setType(content);
+                        }
+                    }
+                }
                 break;
             case "media_type":
-                questionMap.updateMediaType(id, content);
+                synchronized (Object.class) {
+                    //修改数据库中的数据
+                    questionMap.updateMediaType(id, content);
+                    //修改内存中的数据
+                    for (Question q : loadQuestions) {
+                        if (q.getId().equals(id)) {
+                            q.setMediaType(content);
+                        }
+                    }
+                }
                 break;
             case "answer":
-                questionMap.updateAnswer(id, content);
+                synchronized (Object.class) {
+                    //修改数据库中的数据
+                    questionMap.updateAnswer(id, content);
+                    //修改内存中的数据
+                    for (Question q : loadQuestions) {
+                        if (q.getId().equals(id)) {
+                            q.setAnswer(content);
+                        }
+                    }
+                }
                 break;
             default:
                 System.err.println("数据修改无效!");
         }
 
-        //返回json格式
-        String res = "";
-        res = itemsRetrieve();
-        return res;
     }
+
+
 
 }

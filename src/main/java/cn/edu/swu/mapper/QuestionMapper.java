@@ -12,7 +12,16 @@ import java.util.List;
 public interface QuestionMapper {
     List<Question> getAllQuestions();
 
+    Long getMaxId();
+
     void saveQuestion(@Param("question") Question question);
+
+    void updateAll(@Param("id") Long id,
+                   @Param("problem") String problem,
+                   @Param("keywords") String keywords,
+                   @Param("type") String type,
+                   @Param("media_type") String mediaType,
+                   @Param("answer") String answer);
 
     void updateQuestionKeywords(@Param("id") Long id, @Param("keywords") String keywords);
 

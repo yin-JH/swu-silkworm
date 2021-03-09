@@ -24,6 +24,7 @@ import org.springframework.util.ResourceUtils;
 import org.wltea.analyzer.core.IKSegmenter;
 import org.wltea.analyzer.core.Lexeme;
 
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -168,7 +169,8 @@ class SwuChatbotApplicationTests {
 
     @Test
     void testItemsRetrieve() {
-        List<Question> allQuestions = questionMap.getAllQuestions();
+        //返回内存中的内容
+        List<Question> allQuestions = QuestionsHandler.getQuestions();
 
         String allJson = "";
         String res;
@@ -189,6 +191,7 @@ class SwuChatbotApplicationTests {
     }
 
     public String itemsRetrieve() {
+        //返回数据库中的内容
         List<Question> allQuestions = questionMap.getAllQuestions();
 
         String allJson = "";
@@ -206,18 +209,32 @@ class SwuChatbotApplicationTests {
         }
         int len = allJson.length();
         res = allJson.substring(0, len - 1);
+        System.out.println(res);
         return res;
     }
     @Test
-    void testItemsDelete() {
-        List<Question> allQuestions = questionMap.getAllQuestions();
-        //删除该条目
-        questionMap.updateFlag(4L, 0);
+    void testItemsDelete() throws InterruptedException {
+        synchronized (Object.class) {
+            Long id = 11L;
+            List<Question> loadQuestions = QuestionsHandler.getQuestions();
+            //修改内存中的数据
+            Iterator<Question> it = loadQuestions.iterator();
+            while (it.hasNext()){
+                Question q = it.next();
+                if (q.getId().equals(id)) {
+                   it.remove();
+                }
+            }
 
-        //返回json格式
-        String res = "";
-        res = itemsRetrieve();
-        System.out.println(res);
+            //修改数据库中的数据
+            questionMap.updateFlag(id, 0);
+        }
+
+        //Thread.sleep(100);
+        System.out.println("返回数据库中的内容======");
+        itemsRetrieve();
+        System.out.println("返回内存中的内容======" );
+        testItemsRetrieve();
     }
     @Test
     void testItemsUpdate() {
@@ -256,4 +273,114 @@ class SwuChatbotApplicationTests {
         String res = adminService.itemsRetrieve();
         System.out.println(res);
     }
+
+    @Test
+    void testMaxId(){
+        Long id = questionMap.getMaxId();
+        List<Question> allQuestions = questionMap.getAllQuestions();
+        System.out.println(id);
+        System.out.println(allQuestions);
+    }
+    @Test
+    void testItemAdd() {
+        String problem = "测试条目增加";
+        String type = "测试类型";
+        String media_type = "text";
+        String answer = "测试内容";
+
+        //获取内存中的数据
+        List<Question> loadQuestions = QuestionsHandler.getQuestions();
+        synchronized (Object.class) {
+            Long maxId = questionMap.getMaxId();
+            Long newId = maxId + 1L;
+            //为内存中添加新条目
+            Question q = new Question();
+            q.setId(newId);
+            q.setFlag(1);
+            q.setQuestion(problem);
+            q.setType(type);
+            q.setMediaType(media_type);
+            q.setAnswer(answer);
+
+            //切词
+            List<Term> terms = NLPUtil.getInstance().segOneQuestion(problem);
+            List<Term> filteredTerms = TermFilter.getInstance().filter(terms);
+            String keywords = "";
+
+            for (Term filteredTerm : filteredTerms) {
+                keywords += filteredTerm.word + "|";
+            }
+            q.setOriginalKeywords(keywords);
+
+            //添加到内存中
+            loadQuestions.add(q);
+            //添加到数据库中
+            questionMap.saveQuestion(q);
+        }
+        List<Question> allQuestions = QuestionsHandler.getQuestions();
+        String allJson = "";
+        String res;
+
+        //返回json格式
+        for (Question q : allQuestions) {
+            allJson += "{\"id\":\"" + q.getId() +
+                    "\",\"problem\":\"" + q.getQuestion() +
+                    "\",\"keywords\":\"" + q.getOriginalKeywords() +
+                    "\",\"type\":\"" + q.getType() +
+                    "\",\"media_type\":\"" + q.getMediaType() +
+                    "\",\"answer\":\"" + q.getAnswer() +
+                    "\"}" + ",";
+        }
+        int len = allJson.length();
+        res = allJson.substring(0, len - 1);
+
+        System.out.println("返回数据库中的内容======");
+        itemsRetrieve();
+        System.out.println("返回内存中的内容======" );
+        testItemsRetrieve();
+    }
+    @Test
+    void testItemUpdate(){
+        Long id = 183L;
+        String problem = "测试条目修改2";
+        String type = "测试类型修改2";
+        String media_type = "text修改2";
+        String answer = "测试内容修改2";
+
+        synchronized (Object.class){
+            //切词
+            List<Term> terms = NLPUtil.getInstance().segOneQuestion(problem);
+            List<Term> filteredTerms = TermFilter.getInstance().filter(terms);
+            String keywords = "";
+
+            for (Term filteredTerm : filteredTerms) {
+                keywords += filteredTerm.word + "|";
+            }
+
+            //获取内存中的数据
+            List<Question> loadQuestions = QuestionsHandler.getQuestions();
+            for (Question q : loadQuestions) {
+                if(q.getId().equals(id)){
+                    q.setQuestion(problem);
+                    q.setOriginalKeywords(keywords);
+                    q.setType(type);
+                    q.setMediaType(media_type);
+                    q.setAnswer(answer);
+                }
+            }
+            //获取数据库中的数据
+            List<Question> allQuestions = questionMap.getAllQuestions();
+            for (Question q : allQuestions) {
+                if(q.getId().equals(id)){
+                    questionMap.updateAll(id,problem,keywords,type,media_type,answer);
+                }
+            }
+        }
+
+        System.out.println("返回数据库中的内容======");
+        itemsRetrieve();
+        System.out.println("返回内存中的内容======" );
+        testItemsRetrieve();
+    }
+
 }
