@@ -64,4 +64,11 @@ public class AdminController {
         return "success";
     }
 
+    @RequestMapping("/delete")
+    @ResponseBody
+    public String delete(@RequestParam("id") String id,HttpServletRequest request){
+        System.out.println(id);
+        return "success";
+    }
+
 }

@@ -154,7 +154,7 @@ function edit_one(n) {
 }
 function delete_one(n) {
     if (window.confirm("确定要删除吗？"==true)){
-        var url = "/admin";
+        var url = "/admin/delete";
         var args = {id:n};
 
         $.post(url,args,function (res) {if (res=="success"){window.alert("删除成功!");}})
@@ -165,7 +165,7 @@ function submit_data(id) {/* 提交修改 */
     var problem = document.getElementById("input_problem").value;
     var media_type = document.getElementById("input_media_type").value;
     var answer = document.getElementById("input_answer").value;
-    var url="/admin/editdata";
+    var url="/admin/editData";
     var args ={id:id,problem:problem,type:type,media_type:media_type,answer:answer};
     /*window.alert(id);
     window.alert(problem)
