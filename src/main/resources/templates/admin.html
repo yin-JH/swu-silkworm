@@ -22,8 +22,9 @@
 
 <!-- -->
 <div>
-    <div style="text-align: right">
-    <button type="button" onclick="edit_one(-1)">添加</button></div>
+    <div style="float: left;"><button type="button" id="btn_back">返回</button></div>
+    <div style="float: right;">
+    <button type="button" onclick="edit_one(-1)" id="btn_add" style="display: block;">添加</button></div>
     <!-- Table -->
     <table class="table">
         <thead>
@@ -43,8 +44,8 @@
 </div>
 
 <script type="text/javascript">
-    getNavigation();/*加载导航栏*/
-    get_data_table();/*加载数据表格*/
+    initial();/*加载……*/
+    $("#btn_back").click(function () {$("#btn_back").css("display","none");initial();});
 </script>
 </body>
 </html>
