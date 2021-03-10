@@ -77,6 +77,6 @@ public class AskQuestionsService {
 
         System.out.println(result);
 
-        return "";
+        return result.toString();
     }
 }
