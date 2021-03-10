@@ -153,11 +153,13 @@ function edit_one(n) {
     hide_btn();
 }
 function delete_one(n) {
-    if (window.confirm("确定要删除吗？"==true)){
+    if (window.confirm("确定要删除吗？")==true){
         var url = "/admin/delete";
         var args = {id:n};
 
         $.post(url,args,function (res) {if (res=="success"){window.alert("删除成功!");}})
+
+        initial();
     }
 }
 function submit_data(id) {/* 提交修改 */
