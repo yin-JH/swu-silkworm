@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.swu.mapper.UserQuestionMapper">
+    <resultMap id="UserQuestionResultMap" type="cn.edu.swu.entity.UserQuestion">
+        <result column="id" property="id"/>
+        <result column="user_problem" property="userProblem"/>
+        <result column="system_answer" property="systemAnswer"/>
+        <result column="ask_date" property="askDate"/>
+        <result column="flag" property="flag"/>
+    </resultMap>
+
+    <insert id="saveOneUserQuestion">
+        insert into user_question(user_problem,system_answer,ask_date,flag)
+        values(
+            #{userQuestion.userProblem},
+            #{userQuestion.systemAnswer},
+            #{userQuestion.askDate},
+            #{userQuestion.flag}
+        )
+    </insert>
+
+    <select id="loadAllUserQuestions" resultMap="UserQuestionResultMap">
+        select * from user_question
+    </select>
+</mapper>
