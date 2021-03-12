@@ -273,12 +273,12 @@ class SwuChatbotApplicationTests {
         System.out.println(res);
     }
 
-    @Test
+    /*@Test
     void testRetrieve(){
 
         String res = adminService.itemsRetrieve();
         System.out.println(res);
-    }
+    }*/
 
     @Test
     void testMaxId(){

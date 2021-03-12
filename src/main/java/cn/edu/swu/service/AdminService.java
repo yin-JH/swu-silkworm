@@ -6,9 +6,13 @@ import cn.edu.swu.utils.NLPUtil;
 import cn.edu.swu.utils.QuestionsHandler;
 import cn.edu.swu.utils.SearchEngine;
 import cn.edu.swu.utils.TermFilter;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.hankcs.hanlp.seg.common.Term;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.util.*;
@@ -29,11 +33,17 @@ public class AdminService {
     /**
      * 查询功能 返回所有的有效条目
      */
-    public String itemsRetrieve() {
-        //从内存读入
-        List<Question> allQuestions = QuestionsHandler.getQuestions();
+    public PageInfo itemsRetrieve(int pageNum, int pageSize) {
 
-        String allJson = "";
+        PageHelper.startPage(pageNum, pageSize);
+
+        List<Question> allQuestions = questionMapper.getAllQuestions();
+
+        PageInfo pageInfo = new PageInfo(allQuestions,10);
+
+        return pageInfo;
+
+        /*String allJson = "";
         String res;
 
         //返回json格式
@@ -48,7 +58,7 @@ public class AdminService {
         }
         int len = allJson.length();
         res = allJson.substring(0, len - 1);
-        return res;
+        return res;*/
     }
 
     /**

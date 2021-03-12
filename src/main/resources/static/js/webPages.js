@@ -45,20 +45,21 @@ function getNavigation() {/* js 生成导航栏 */
         }
     }
 }
-function get_data_table() {/* js 表格数据 */
-    /*  动态生成表格 ↓  */
+
+/*function get_data_table() {/!* js 表格数据 *!/
+    /!*  动态生成表格 ↓  *!/
     var tbody = document.querySelector("tbody");
     var i = 1;
     var str;
-    var url = "/admin/retrieve";/*接口地址*/
+    var url = "/admin";/!*接口地址*!/
     var args = {};
 
     tbody.innerHTML="";
     $.ajaxSettings.async=true;
     $.post(url,args,function (res) {
-        /*res='{"id"=1,"problem"="1111","media_type"="123","answer"="123456"}';*/
+        /!*res='{"id"=1,"problem"="1111","media_type"="123","answer"="123456"}';*!/
         str = '['+res+']';
-        /*console.log(str);*/
+        /!*console.log(str);*!/
 
         var obj = JSON.parse(str);
 
@@ -94,23 +95,24 @@ function get_data_table() {/* js 表格数据 */
         }
     });
     $.ajaxSettings.async=false;
-    /*  动态生成表格 ↑  */
-    /*hide_btn();*/
-}
-function edit_one(n) {
-    /*  生成编辑窗口  */
+    /!*  动态生成表格 ↑  *!/
+    /!*hide_btn();*!/
+}*/
+
+/*function edit_one(n) {
+    /!*  生成编辑窗口  *!/
     var tbody = document.querySelector("tbody");
     var i = 1;
     var str;
-    var url = "/admin/retrieve";/*接口地址*/
+    var url = "/admin";/!*接口地址*!/
     var args = {};
     var obj;
 
     if (n !== -1){
         $.ajaxSettings.async=false;
-        $.post(url,args,function (res) {str=res;/*window.alert(str);*/});
+        $.post(url,args,function (res) {str=res;/!*window.alert(str);*!/});
         $.ajaxSettings.async=true;
-        /*window.alert(str);*/
+        /!*window.alert(str);*!/
         obj = JSON.parse('['+str+']');
     }
     else {
@@ -160,13 +162,15 @@ function edit_one(n) {
     }
 
     hide_btn();
-}
+}*/
+
 function get_media() {/*根据选择改变输入框类型*/
     var answerHtml = document.getElementById("input_answer");
     var mediaType = document.getElementById("input_media_type");
     /*console.log(mediaType.value)*/
     if (mediaType.value == "text"){answerHtml.type = "text";}else{answerHtml.type = "file";}
 }
+
 function delete_one(n) {
     if (window.confirm("确定要删除吗？")==true){
         var url = "/admin/delete";
@@ -200,6 +204,7 @@ function submit_data(id) {/* 提交修改 */
     });*/
     initial();
 }
+
 function hide_btn() {
     if (document.getElementById("input_problem")){console.log("hide:add,display:back"); $("#btn_add").css("display","none");  /*隐藏添加按钮*/  $("#btn_back").css("display","block"); /*显示返回按钮*/} else {console.log("hide:back,display:add"); $("#btn_add").css("display","block"); /*取消隐藏添加按钮*/ $("#btn_back").css("display","none"); /*隐藏返回按钮*/}
 }
