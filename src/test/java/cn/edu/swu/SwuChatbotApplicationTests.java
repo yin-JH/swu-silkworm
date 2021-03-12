@@ -4,8 +4,10 @@ import java.io.*;
 
 
 import cn.edu.swu.entity.Question;
+import cn.edu.swu.entity.UserQuestion;
 import cn.edu.swu.mapper.QuestionMapper;
 
+import cn.edu.swu.mapper.UserQuestionMapper;
 import cn.edu.swu.service.AdminService;
 import cn.edu.swu.service.AskQuestionsService;
 import cn.edu.swu.utils.NLPUtil;
@@ -30,6 +32,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.ResourceUtils;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -45,6 +49,9 @@ class SwuChatbotApplicationTests {
 
     @Autowired
     AdminService adminService;
+
+    @Autowired
+    UserQuestionMapper userQuestionMapper;
 
     /*@Test
     void contextLoads() throws IOException {
@@ -467,4 +474,28 @@ class SwuChatbotApplicationTests {
 
     }
 
+    @Test
+    void testUserQuestionMapper(){
+        UserQuestion userQuestion = new UserQuestion();
+        userQuestion.setUserProblem("东百往事");
+        userQuestion.setSystemAnswer(2L);
+        userQuestion.setFlag(1);
+
+
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date(System.currentTimeMillis());
+
+        String format = formatter.format(date);
+
+        userQuestion.setAskDate(format);
+
+        userQuestionMapper.saveOneUserQuestion(userQuestion);
+    }
+
+    @Test
+    void testUserQuestionMapperSelectAll(){
+        List<UserQuestion> userQuestions = userQuestionMapper.loadAllUserQuestions();
+
+        System.out.println(userQuestions);
+    }
 }

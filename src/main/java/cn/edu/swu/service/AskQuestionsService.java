@@ -100,6 +100,10 @@ public class AskQuestionsService {
             e.printStackTrace();
         }
 
+        //记录用户提过的问题
+        Long answerId = results == null ? null : results.get(0).getId();
+        UserQuestionUtil.getInstance().saveUserQuestion(question, answerId);
+
         return results.toString();
     }
 }

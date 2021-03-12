@@ -1,10 +1,13 @@
 package cn.edu.swu.utils;
 
+import cn.edu.swu.entity.UserQuestion;
 import cn.edu.swu.mapper.QuestionMapper;
+import cn.edu.swu.mapper.UserQuestionMapper;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -20,13 +23,13 @@ public class UserQuestionUtil {
     private static SqlSessionTemplate sqlSessionTemplate;
     private static SqlSession sqlSessionForQuestionMapper;
 
-    private static QuestionMapper questionMapper;
+    private static UserQuestionMapper userQuestionMapper;
 
     static {
         sqlSessionTemplate = SpringUtil.getBean(SqlSessionTemplate.class);
         sqlSessionForQuestionMapper = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
 
-        questionMapper = sqlSessionForQuestionMapper.getMapper(QuestionMapper.class);
+        userQuestionMapper = sqlSessionForQuestionMapper.getMapper(UserQuestionMapper.class);
     }
 
     private UserQuestionUtil(){
@@ -37,7 +40,21 @@ public class UserQuestionUtil {
         return INSTANCE;
     }
 
-    public void loadUserQuestion(String userProblem, Long answerId, Date userTime){
+    public void saveUserQuestion(String userProblem, Long answerId){
+        UserQuestion userQuestion = new UserQuestion();
 
+        userQuestion.setUserProblem(userProblem);
+        userQuestion.setSystemAnswer(answerId);
+        userQuestion.setFlag(1);
+
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date(System.currentTimeMillis());
+
+        String format = formatter.format(date);
+
+        userQuestion.setAskDate(format);
+
+        userQuestionMapper.saveOneUserQuestion(userQuestion);
+        sqlSessionForQuestionMapper.commit();
     }
 }
