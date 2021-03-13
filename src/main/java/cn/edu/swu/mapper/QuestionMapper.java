@@ -12,6 +12,8 @@ import java.util.List;
 public interface QuestionMapper {
     List<Question> getAllQuestions();
 
+    Question getQuestionById(@Param("id") Long id);
+
     Long getMaxId();
 
     void saveQuestion(@Param("question") Question question);

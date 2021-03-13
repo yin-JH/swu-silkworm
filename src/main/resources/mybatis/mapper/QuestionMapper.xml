@@ -19,6 +19,10 @@
         select max(id) from question
     </select>
 
+    <select id="getQuestionById" resultMap="QuestionResultMap">
+        select * from question where id = #{id}
+    </select>
+
     <insert id="saveQuestion" parameterType="cn.edu.swu.entity.Question">
         insert into question(problem,keywords,`type`,media_type,answer)
         values(

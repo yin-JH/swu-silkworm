@@ -1,11 +1,10 @@
 package cn.edu.swu.service;
 
 import cn.edu.swu.entity.Question;
+import cn.edu.swu.entity.UserQuestion;
 import cn.edu.swu.mapper.QuestionMapper;
-import cn.edu.swu.utils.NLPUtil;
-import cn.edu.swu.utils.QuestionsHandler;
-import cn.edu.swu.utils.SearchEngine;
-import cn.edu.swu.utils.TermFilter;
+import cn.edu.swu.mapper.UserQuestionMapper;
+import cn.edu.swu.utils.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hankcs.hanlp.seg.common.Term;
@@ -29,6 +28,9 @@ public class AdminService {
 
     @Autowired
     QuestionMapper questionMapper;
+
+    @Autowired
+    UserQuestionMapper userQuestionMapper;
 
     /**
      * 查询功能 返回所有的有效条目
@@ -269,6 +271,46 @@ public class AdminService {
 
     }
 
+    public String getUserQuestions(){
+        //获取内存中的数据
+        List<UserQuestion> allUserQuestions = userQuestionMapper.loadAllUserQuestions();
+        List<Question> loadQuestions = QuestionsHandler.getQuestions();
+
+
+        String problem="";
+        String type="";
+        String media_type="";
+        String answer="";
+
+        String  sysAnswerJson="";
+        String finalJson="";
+
+        //获取相应的数据组
+        for (UserQuestion q : allUserQuestions) {
+            Long id = q.getSystemAnswer();
+            for (Question loadQuestion : loadQuestions) {
+                if(loadQuestion.getId().equals(id)){
+                    problem = loadQuestion.getQuestion();
+                    type = loadQuestion.getType();
+                    media_type = loadQuestion.getMediaType();
+                    answer = loadQuestion.getAnswer();
+
+                    sysAnswerJson ="{\"type\":\"" + type +
+                            "\",\"media_type\":\"" + media_type +
+                            "\",\"answer\":\"" + answer +
+                            "\"}";
+                    break;
+                }
+            }
+            finalJson += "{\"user_problem\":\"" + q.getUserProblem() +
+                    "\",\"sysAnswer\":\"" + sysAnswerJson +
+                    "\"}" + ",";
+        }
+        int len = finalJson.length();
+        String res = finalJson.substring(0, len - 1);
+
+        return res;
+    }
 
 
 }
