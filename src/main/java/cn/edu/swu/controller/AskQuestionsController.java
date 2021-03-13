@@ -27,7 +27,7 @@ public class AskQuestionsController {
 
         System.out.println(question);
 
-        return askQuestionsService.askOneQ(question);
+        return askQuestionsService.askOneQUseSearchEngine(question);
     }
 
 }

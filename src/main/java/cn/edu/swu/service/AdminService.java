@@ -4,11 +4,17 @@ import cn.edu.swu.entity.Question;
 import cn.edu.swu.mapper.QuestionMapper;
 import cn.edu.swu.utils.NLPUtil;
 import cn.edu.swu.utils.QuestionsHandler;
+import cn.edu.swu.utils.SearchEngine;
 import cn.edu.swu.utils.TermFilter;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.hankcs.hanlp.seg.common.Term;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -22,15 +28,22 @@ import java.util.*;
 public class AdminService {
 
     @Autowired
-    QuestionMapper questionMap;
+    QuestionMapper questionMapper;
 
     /**
      * 查询功能 返回所有的有效条目
      */
     public String itemsRetrieve() {
-        //从内存读入
-        List<Question> allQuestions = QuestionsHandler.getQuestions();
 
+        /*PageHelper.startPage(pageNum, pageSize);
+
+        List<Question> allQuestions = questionMapper.getAllQuestions();
+
+        PageInfo pageInfo = new PageInfo(allQuestions,10);
+
+        return pageInfo;*/
+
+        List<Question> allQuestions = QuestionsHandler.getQuestions();
         String allJson = "";
         String res;
 
@@ -63,11 +76,23 @@ public class AdminService {
             while (it.hasNext()){
                 Question q = it.next();
                 if (q.getId().equals(id)) {
+                    //将检索空间中的一并删除
+                    SearchEngine searchEngine = SearchEngine.getInstance();
+
+                    try {
+                        searchEngine.deleteDoc(q.getId());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     it.remove();
                 }
             }
+
+            //修改查询工具SearchEngine中的数据
+
+
             //修改数据库中的数据
-            questionMap.updateFlag(id, 0);
+            questionMapper.updateFlag(id, 0);
         }
 
     }
@@ -83,7 +108,8 @@ public class AdminService {
         synchronized (Object.class) {
             //获取内存中的数据
             List<Question> loadQuestions = QuestionsHandler.getQuestions();
-            Long maxId = questionMap.getMaxId();
+
+            Long maxId = questionMapper.getMaxId();
             Long newId = maxId + 1L;
             //为内存中添加新条目
             Question q = new Question();
@@ -106,8 +132,17 @@ public class AdminService {
 
             //添加到内存中
             loadQuestions.add(q);
+
+            //添加到索引空间
+            SearchEngine searchEngine = SearchEngine.getInstance();
+            try {
+                searchEngine.addDoc(q);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             //添加到数据库中
-            questionMap.saveQuestion(q);
+            questionMapper.saveQuestion(q);
         }
 
     }
@@ -139,13 +174,24 @@ public class AdminService {
                     q.setType(type);
                     q.setMediaType(media_type);
                     q.setAnswer(answer);
+
+                    //更新索引空间中的数据
+                    SearchEngine searchEngine = SearchEngine.getInstance();
+                    try {
+                        searchEngine.updateOneDoc(q);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
+
+
             //获取数据库中的数据
-            List<Question> allQuestions = questionMap.getAllQuestions();
+            List<Question> allQuestions = questionMapper.getAllQuestions();
             for (Question q : allQuestions) {
                 if(q.getId().equals(id)){
-                    questionMap.updateAll(id,problem,keywords,type,media_type,answer);
+                    questionMapper.updateAll(id,problem,keywords,type,media_type,answer);
                 }
             }
         }
@@ -160,7 +206,7 @@ public class AdminService {
             case "problem":
                 synchronized (Object.class) {
                     //修改数据库中的数据
-                    questionMap.updateProblem(id, content);
+                    questionMapper.updateProblem(id, content);
                     //修改内存中的数据
                     for (Question q : loadQuestions) {
                         if (q.getId().equals(id)) {
@@ -172,7 +218,7 @@ public class AdminService {
             case "keywords":
                 synchronized (Object.class) {
                     //修改数据库中的数据
-                    questionMap.updateQuestionKeywords(id, content);
+                    questionMapper.updateQuestionKeywords(id, content);
                     //修改内存中的数据
                     for (Question q : loadQuestions) {
                         if (q.getId().equals(id)) {
@@ -184,7 +230,7 @@ public class AdminService {
             case "type":
                 synchronized (Object.class) {
                     //修改数据库中的数据
-                    questionMap.updateType(id, content);
+                    questionMapper.updateType(id, content);
                     //修改内存中的数据
                     for (Question q : loadQuestions) {
                         if (q.getId().equals(id)) {
@@ -196,7 +242,7 @@ public class AdminService {
             case "media_type":
                 synchronized (Object.class) {
                     //修改数据库中的数据
-                    questionMap.updateMediaType(id, content);
+                    questionMapper.updateMediaType(id, content);
                     //修改内存中的数据
                     for (Question q : loadQuestions) {
                         if (q.getId().equals(id)) {
@@ -208,7 +254,7 @@ public class AdminService {
             case "answer":
                 synchronized (Object.class) {
                     //修改数据库中的数据
-                    questionMap.updateAnswer(id, content);
+                    questionMapper.updateAnswer(id, content);
                     //修改内存中的数据
                     for (Question q : loadQuestions) {
                         if (q.getId().equals(id)) {

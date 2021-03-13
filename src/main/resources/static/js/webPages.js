@@ -94,8 +94,10 @@ function get_data_table() {/* js 表格数据 */
         }
         goPage(1);
     });
+
     $.ajaxSettings.async=false;
     /*  动态生成表格 ↑  */
+
     /*hide_btn();*/
 }
 function edit_one(n) {
@@ -138,44 +140,27 @@ function edit_one(n) {
 
             var td = document.createElement("td");
             tr.appendChild(td);
-            td.innerHTML = "<div class=\"input-group\">\n                   <select id=\"input_media_type\" onchange=\"get_media()\"><option value=\"text\">text</option><option value=\"image\">image</option><option value=\"video\">video</option></select></div>";
-            var objmt = document.getElementById("input_media_type")
-            if (obj[i].media_type != ""){for(var i = 0;i<objmt.length;i++){if (objmt[i].value == obj[i].media_type){objmt[i].selected = true;}}}
+            td.innerHTML = "<div class=\"input-group\">\n                   <input id=\"input_media_type\" type=\"text\" class=\"form-control\" value= \""+obj[i].media_type+"\" aria-describedby=\"basic-addon1\"> </div>";
 
             var td = document.createElement("td");
             tr.appendChild(td);
-            if (obj[i].media_type == "text") {
-                td.innerHTML = "<div class=\"input-group\">\n                   <input id=\"input_answer\" type=\"text\" class=\"form-control\" value=\"" + obj[i].answer + "\" aria-describedby=\"basic-addon1\"> </div>";
-            }
-            else{
-                td.innerHTML = "<div class=\"input-group\">\n                   <input id=\"input_answer\" type=\"file\" class=\"form-control\" name=\"" + obj[i].answer + "\" aria-describedby=\"basic-addon1\"> </div>";
-            }
+            td.innerHTML = "<div class=\"input-group\">\n                   <input id=\"input_answer\" type=\"text\" class=\"form-control\" value=\""+obj[i].answer+"\" aria-describedby=\"basic-addon1\"> </div>";
 
             var td = document.createElement("td");
             tr.appendChild(td);
             var id = obj[i].id;
-            td.innerHTML = "<button id=" + id + " type=\"submit\" onclick=\"submit_data(id)\">提交</button>";
+            td.innerHTML = "<button id="+id+" type=\"submit\" onclick=\"submit_data(id)\">提交</button>";
 
-            get_media();
         }
     }
-
     hide_btn();
 }
-function get_media() {/*根据选择改变输入框类型*/
-    var answerHtml = document.getElementById("input_answer");
-    var mediaType = document.getElementById("input_media_type");
-    /*console.log(mediaType.value)*/
-    if (mediaType.value == "text"){answerHtml.type = "text";}else{answerHtml.type = "file";}
-}
 function delete_one(n) {
-    if (window.confirm("确定要删除吗？")==true){
+    if (window.confirm("确定要删除吗？"==true)){
         var url = "/admin/delete";
         var args = {id:n};
 
         $.post(url,args,function (res) {if (res=="success"){window.alert("删除成功!");}})
-
-        initial();
     }
 }
 function submit_data(id) {/* 提交修改 */
@@ -201,7 +186,7 @@ function submit_data(id) {/* 提交修改 */
     });*/
     initial();
 }
-function hide_btn() {
+function hide_btn() {/*隐藏按钮*/
     if (document.getElementById("input_problem")){console.log("hide:add,display:back"); $("#btn_add").css("display","none");  /*隐藏添加按钮*/  $("#btn_back").css("display","block"); /*显示返回按钮*/} else {console.log("hide:back,display:add"); $("#btn_add").css("display","block"); /*取消隐藏添加按钮*/ $("#btn_back").css("display","none"); /*隐藏返回按钮*/}
 }
 function initial() {
