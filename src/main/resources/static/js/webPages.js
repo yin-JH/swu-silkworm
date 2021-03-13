@@ -156,7 +156,7 @@ function edit_one(n) {
     hide_btn();
 }
 function delete_one(n) {
-    if (window.confirm("确定要删除吗？"==true)){
+    if (window.confirm("确定要删除吗？")==true){
         var url = "/admin/delete";
         var args = {id:n};
 
