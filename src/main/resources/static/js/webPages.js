@@ -92,9 +92,12 @@ function get_data_table() {/* js 表格数据 */
             var id = obj[i].id;
             td.innerHTML = "<button id=" + id + " type=\"button\" onclick=\"edit_one(id)\">编辑</button><button id=" + id + " type=\"button\" onclick=\"delete_one(id)\">删除</button>";
         }
+        goPage(1);
     });
+
     $.ajaxSettings.async=false;
     /*  动态生成表格 ↑  */
+
     /*hide_btn();*/
 }
 function edit_one(n) {
@@ -183,10 +186,73 @@ function submit_data(id) {/* 提交修改 */
     });*/
     initial();
 }
-function hide_btn() {
+function hide_btn() {/*隐藏按钮*/
     if (document.getElementById("input_problem")){console.log("hide:add,display:back"); $("#btn_add").css("display","none");  /*隐藏添加按钮*/  $("#btn_back").css("display","block"); /*显示返回按钮*/} else {console.log("hide:back,display:add"); $("#btn_add").css("display","block"); /*取消隐藏添加按钮*/ $("#btn_back").css("display","none"); /*隐藏返回按钮*/}
 }
 function initial() {
     getNavigation();
     if (window.location.pathname == "/admin" || window.location.pathname == "/admin/"){get_data_table();hide_btn();}
+}
+/**
+ * 分页函数
+ * pno--页数
+ * psize--每页显示记录数
+ * 分页部分是从真实数据行开始，因而存在加减某个常数，以确定真正的记录数
+ * 纯js分页实质是数据行全部加载，通过是否显示属性完成分页功能
+ **/
+function goPage(pno){
+    var itable = document.getElementById("idData");
+    var num = itable.rows.length;//表格所有行数(所有记录数)
+    console.log(num);
+    var totalPage = 0;//总页数
+    var pageSize = 15;//每页显示行数
+    //总共分几页
+    if(num/pageSize > parseInt(num/pageSize)){
+        totalPage=parseInt(num/pageSize)+1;
+    }else{
+        totalPage=parseInt(num/pageSize);
+    }
+    var currentPage = pno;//当前页数
+    var startRow = (currentPage - 1) * pageSize+1;//开始显示的行  31
+    var endRow = currentPage * pageSize;//结束显示的行   40
+    endRow = (endRow > num)? num : endRow;    //40
+    console.log(endRow);
+    //遍历显示数据实现分页
+    for(var i=1;i<(num+1);i++){
+        var irow = itable.rows[i-1];
+        if(i>=startRow && i<=endRow){
+            irow.style.display = "table-row";
+        }else{
+            irow.style.display = "none";
+        }
+    }
+    var pageEnd = document.getElementById("pageEnd");
+    var tempStr = "<span>共"+totalPage+"页</span>";
+
+
+//.bind("click",{"newPage":pageIndex},function(event){
+//        goPage((pageIndex-1)*pageSize+1,(pageIndex-1)*pageSize+pageSize);
+//    }).appendTo('#pages');
+    if(currentPage>1){
+        tempStr += "<span class='btn' href=\"#\" onClick=\"goPage("+(1)+")\">首页</span>";
+        tempStr += "<span class='btn' href=\"#\" onClick=\"goPage("+(currentPage-1)+")\">上一页</span>"
+    }else{
+        tempStr += "<span class='btn'>首页</span>";
+        tempStr += "<span class='btn'>上一页</span>";
+    }
+
+    for(var pageIndex= 1;pageIndex<totalPage+1;pageIndex++){
+        tempStr += "<a onclick=\"goPage("+pageIndex+")\"><span>"+ pageIndex +"</span></a>";
+    }
+
+    if(currentPage<totalPage){
+        tempStr += "<span class='btn' href=\"#\" onClick=\"goPage("+(currentPage+1)+")\">下一页</span>";
+        tempStr += "<span class='btn' href=\"#\" onClick=\"goPage("+(totalPage)+")\">尾页</span>";
+    }else{
+        tempStr += "<span class='btn'>下一页</span>";
+        tempStr += "<span class='btn'>尾页</span>";
+    }
+
+    document.getElementById("barcon").innerHTML = tempStr;
+
 }
