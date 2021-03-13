@@ -39,7 +39,7 @@ import java.util.List;
 
 
 @SpringBootTest
-class SwuChatbotApplicationTests {
+class  SwuChatbotApplicationTests {
 
     @Autowired
     QuestionMapper questionMap;
@@ -501,5 +501,15 @@ class SwuChatbotApplicationTests {
     @Test
     void testAskOneQReturn(){
         System.out.println(askQuestionsService.askOneQUseSearchEngine("怎样除沙"));
+    }
+    @Test
+    void testSelectQuestionById(){
+        Question q = questionMap.getQuestionById(18L);
+        System.out.println(q);
+    }
+    @Test
+    void testGetUserQuestions(){
+        String res = adminService.getUserQuestions();
+        System.out.println(res);
     }
 }

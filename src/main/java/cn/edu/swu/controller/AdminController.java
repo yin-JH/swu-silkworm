@@ -36,6 +36,8 @@ public class AdminController {
     /**
      * 写入功能
      */
+
+
     @RequestMapping("/retrieve")
     @ResponseBody
     public String retrieve() {
@@ -72,6 +74,23 @@ public class AdminController {
     public String delete(@RequestParam("id") String id,HttpServletRequest request){
         Long newId = Long.parseLong(id);
         adminService.itemsDelete(newId);
+        return "success";
+    }
+
+    @RequestMapping("/userQuestionsRetrieve")
+    @ResponseBody
+    public String userQuestionsRetrieve() {
+        String  res = adminService.getUserQuestions();
+        return res;
+    }
+
+    @RequestMapping("/saveNewQuestion")
+    @ResponseBody
+    public String saveNewQuestion(@RequestParam("problem") String problem,
+                           @RequestParam("type") String type,
+                           @RequestParam("media_type") String media_type,
+                           @RequestParam("answer") String answer, HttpServletRequest request) {
+        adminService.itemAdd(problem,type,media_type,answer);
         return "success";
     }
 
