@@ -14,7 +14,7 @@ function getNavigation() {/* js 生成导航栏 */
         "                <span class=\"icon-bar\"></span>\n" +
         "                <span class=\"icon-bar\"></span>\n" +
         "            </button>\n" +
-        "            <a class=\"navbar-brand\" href=\"#\">蚕</a>\n" +
+        "            <a class=\"navbar-brand\" href=\"javascript:void(0)\">SilkWorm</a>\n" +
         "        </div>\n" +
         "\n" +
         "        <!-- Collect the nav links, forms, and other content for toggling -->\n" +
@@ -265,12 +265,9 @@ function submit_question() {
         question = question.substring(0,question.length-1);
     }
 
-    var url = "/api/v0.01/askOnWeb/askOneQ";
+    var url = "api/v0.01/askOnWeb/askOneQ";
     var args = {question:question};
-    var anserJson ="";
     var answer = "";
-
-
     /*console.log(question);*/
     $.ajaxSettings.async=false;
     $.post(url,args,function (res) {/*console.log(res);*/ anserJson =res;})

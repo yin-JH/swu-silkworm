@@ -38,10 +38,26 @@
 
     initial();/*加载……*/
 
-    $("#submit").bind("keyup",function (event) {
-        if (event == "13"){$("#submit").click(submit_question());}
+    $(document).bind("keyup",function (event) {
+        /*console.log(event.keyCode == 13);*/
+        if (event.keyCode == 13){submit_question();}
     })
-    $("#submit").click(submit_question());
+
+    $("#submit").click(function () {
+        var question = $("#question_box").val();
+
+        var url = "api/v0.01/askOnWeb/askOneQ";
+        var args = {question:question};
+        var answer = "";
+        /*console.log(question);*/
+        $.ajaxSettings.async=false;
+        $.post(url,args,function (res) {/*console.log(res);*/ anserJson =res;})
+        console.log(anserJson);
+        anserJson = JSON.parse(anserJson);
+        for(var i=0;i<anserJson.length;i++){answer += "问题："+anserJson[i]["question"] + "?\n答：" + anserJson[i]["answer"] + "\n"}
+        window.alert(answer);
+        $.ajaxSettings.async=true;
+    });
 
 </script>
 </body>

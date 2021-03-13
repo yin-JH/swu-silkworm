@@ -101,7 +101,7 @@ public class AskQuestionsService {
         }
 
         //记录用户提过的问题
-        Long answerId = results == null ? null : results.get(0).getId();
+        Long answerId = results.size() == 0 ? null : results.get(0).getId();
         UserQuestionUtil.getInstance().saveUserQuestion(question, answerId);
 
         return results.toString();

@@ -97,7 +97,7 @@ public class SearchEngine {
             questions.add(this.doc2Question(docs[i]));
         }
 
-        System.err.println(indexSearcher.maxDoc());
+        /*System.err.println(indexSearcher.maxDoc());*/
         return questions;
     }
 
