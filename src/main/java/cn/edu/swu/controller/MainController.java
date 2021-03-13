@@ -14,15 +14,15 @@ public class MainController {
     @Autowired
     AdminService adminService;
 
-    /*@RequestMapping("/admin")
-    public String admin(@RequestParam(name = "pageNum",defaultValue = "1") int pageNum, @RequestParam(name = "pageSize",defaultValue = "10") int pageSize, Model model) {
-
+    @RequestMapping("/admin")
+    public String admin() {
+        //@RequestParam(name = "pageNum",defaultValue = "1") int pageNum, @RequestParam(name = "pageSize",defaultValue = "10") int pageSize, Model model
         //System.err.println(pageNum + "  " + pageSize);
 
-        PageInfo pageInfo = adminService.itemsRetrieve(pageNum, pageSize);
-        model.addAttribute("questionPageInfo",pageInfo);
+        /*PageInfo pageInfo = adminService.itemsRetrieve(pageNum, pageSize);
+        model.addAttribute("questionPageInfo",pageInfo);*/
         return "admin";
-    }*/
+    }
 
     @RequestMapping("/index")
     public String index(){
