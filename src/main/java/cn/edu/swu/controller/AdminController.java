@@ -36,12 +36,12 @@ public class AdminController {
     /**
      * 写入功能
      */
-    /*@RequestMapping("/retrieve")
+    @RequestMapping("/retrieve")
     @ResponseBody
-    public String retrieve(@RequestParam(name = "pageNum",defaultValue = "1") int pageNum, @RequestParam(name = "pageSize",defaultValue = "10") int pageSize, Model model) {
-        PageInfo pageInfo = adminService.itemsRetrieve(pageNum, pageSize);
-        return "admin";
-    }*/
+    public String retrieve() {
+        String  res = adminService.itemsRetrieve();
+        return res;
+    }
 
     /*@RequestMapping("/updateData")
     @ResponseBody

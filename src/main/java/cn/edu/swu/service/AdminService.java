@@ -33,17 +33,18 @@ public class AdminService {
     /**
      * 查询功能 返回所有的有效条目
      */
-    public PageInfo itemsRetrieve(int pageNum, int pageSize) {
+    public String itemsRetrieve() {
 
-        PageHelper.startPage(pageNum, pageSize);
+        /*PageHelper.startPage(pageNum, pageSize);
 
         List<Question> allQuestions = questionMapper.getAllQuestions();
 
         PageInfo pageInfo = new PageInfo(allQuestions,10);
 
-        return pageInfo;
+        return pageInfo;*/
 
-        /*String allJson = "";
+        List<Question> allQuestions = QuestionsHandler.getQuestions();
+        String allJson = "";
         String res;
 
         //返回json格式
@@ -58,7 +59,7 @@ public class AdminService {
         }
         int len = allJson.length();
         res = allJson.substring(0, len - 1);
-        return res;*/
+        return res;
     }
 
     /**
