@@ -14,6 +14,9 @@ public class MainController {
     @Autowired
     AdminService adminService;
 
+    @RequestMapping("/questions")
+    public String questions(){return "questions";}
+
     @RequestMapping("/admin")
     public String admin() {
         //@RequestParam(name = "pageNum",defaultValue = "1") int pageNum, @RequestParam(name = "pageSize",defaultValue = "10") int pageSize, Model model

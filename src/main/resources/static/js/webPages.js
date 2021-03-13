@@ -1,6 +1,7 @@
 function initial() {
     getNavigation();
     if (window.location.pathname == "/admin" || window.location.pathname == "/admin/"){get_data_table();hide_btn();}
+    if (window.location.pathname == "/questions" || window.location.pathname == "/questions/"){get_questions_table();}
 }
 function getNavigation() {/* js 生成导航栏 */
     var a = "";
@@ -42,10 +43,13 @@ function getNavigation() {/* js 生成导航栏 */
     /*window.alert(window.location.pathname);*/
     if (window.location.pathname != "/login" && window.location.pathname !="/login/"){
         if(window.location.pathname == "/index" || window.location.pathname =="/index/"){
-            document.getElementById("navi_left").innerHTML="<li class=\"active\"><a href=\"/index\">问答界面</a></li>\n<li><a href=\"/admin\">数据管理</a></li>"
+            document.getElementById("navi_left").innerHTML="<li class=\"active\"><a href=\"/index\">问答界面</a></li>\n<li><a href=\"/admin\">数据管理</a>\n<li><a href=\"/questions\">问题查看</a></li>"
         }
         else if (window.location.pathname == "/admin" || window.location.pathname =="/admin/"){
-            document.getElementById("navi_left").innerHTML="<li><a href=\"/index\">问答界面</a></li>\n<li class=\"active\"><a href=\"/admin\">数据管理</a></li>"
+            document.getElementById("navi_left").innerHTML="<li><a href=\"/index\">问答界面</a></li>\n<li class=\"active\"><a href=\"/admin\">数据管理</a>\n<li><a href=\"/questions\">问题查看</a></li>"
+        }
+        else if (window.location.pathname == "/questions" || window.location.pathname =="/questions/"){
+            document.getElementById("navi_left").innerHTML="<li><a href=\"/index\">问答界面</a></li>\n<li><a href=\"/admin\">数据管理</a>\n<li class=\"active\"><a href=\"/questions\">问题查看</a></li>"
         }
     }
 }
@@ -94,15 +98,65 @@ function get_data_table() {/* js 表格数据 */
             var td = document.createElement("td");
             tr.appendChild(td);
             var id = obj[i].id;
-            td.innerHTML = "<button id=" + id + " type=\"button\" onclick=\"edit_one(id)\">编辑</button><button id=" + id + " type=\"button\" onclick=\"delete_one(id)\">删除</button>";
+            td.innerHTML = "<button id=" + id + " type=\"button\" onclick=\"edit_one(id)\" class=\"btn btn-default btn-sm\">编辑</button><button id=" + id + " type=\"button\" onclick=\"delete_one(id)\" class=\"btn btn-default btn-sm\">删除</button>";
         }
         goPage(1);
+        altRows('alternatecolor');
     });
 
     $.ajaxSettings.async=false;
     /*  动态生成表格 ↑  */
 
     /*hide_btn();*/
+}
+function get_questions_table() {
+    /*  动态生成表格 ↓  */
+    var tbody = document.querySelector("tbody");
+    var i = 1;
+    var str;
+    var url = "/admin/*retrieve";/*接口地址*/
+    var args = {};
+
+    tbody.innerHTML="";
+    $.ajaxSettings.async=true;
+    $.post(url,args,function (res) {
+        /*res='{"id"=1,"user_problem"="1111","system_answer"="123456"}',"ask_date":"2021-2-1";*/
+        str = '['+res+']';
+        /*console.log(str);*/
+
+        var obj = JSON.parse(str);
+
+        for(var i = 0;i < obj.length;i++){
+            var tr = document.createElement("tr");
+            tbody.appendChild(tr);
+
+            var td = document.createElement("td");
+            tr.appendChild(td);
+            td.innerHTML = 1+i;
+
+            var td = document.createElement("td");
+            tr.appendChild(td);
+            td.innerHTML = obj[i].user_problem;
+
+            var td = document.createElement("td");
+            tr.appendChild(td);
+            td.innerHTML = obj[i].system_answer;
+
+            var td = document.createElement("td");
+            tr.appendChild(td);
+            td.innerHTML = obj[i].ask_date;
+
+            var td = document.createElement("td");
+            tr.appendChild(td);
+            var id = obj[i].id;
+            td.innerHTML = "<button id=" + id + " type=\"button\" onclick=\"edit_answer(id)\" class=\"btn btn-default btn-sm\">编辑回答</button>";
+        }
+        goPage(1);
+        altRows('alternatecolor');
+    });
+
+    $.ajaxSettings.async=false;
+    /*  动态生成表格 ↑  */
 }
 function edit_one(n) {
     /*  生成编辑窗口  */
@@ -203,7 +257,7 @@ function hide_btn() {/*隐藏按钮*/
 function goPage(pno){
     var itable = document.getElementById("idData");
     var num = itable.rows.length;//表格所有行数(所有记录数)
-    console.log(num);
+    /*console.log(num);*/
     var totalPage = 0;//总页数
     var pageSize = 15;//每页显示行数
     //总共分几页
@@ -216,7 +270,7 @@ function goPage(pno){
     var startRow = (currentPage - 1) * pageSize+1;//开始显示的行  31
     var endRow = currentPage * pageSize;//结束显示的行   40
     endRow = (endRow > num)? num : endRow;    //40
-    console.log(endRow);
+    /*console.log(endRow);*/
     //遍历显示数据实现分页
     for(var i=1;i<(num+1);i++){
         var irow = itable.rows[i-1];
@@ -227,33 +281,34 @@ function goPage(pno){
         }
     }
     var pageEnd = document.getElementById("pageEnd");
-    var tempStr = "<span>共"+totalPage+"页</span>";
+    var tempStr = "<li><span>共"+totalPage+"页</span></li>";
 
 
 //.bind("click",{"newPage":pageIndex},function(event){
 //        goPage((pageIndex-1)*pageSize+1,(pageIndex-1)*pageSize+pageSize);
 //    }).appendTo('#pages');
     if(currentPage>1){
-        tempStr += "<span class='btn' href=\"#\" onClick=\"goPage("+(1)+")\">首页</span>";
-        tempStr += "<span class='btn' href=\"#\" onClick=\"goPage("+(currentPage-1)+")\">上一页</span>"
+        tempStr += "<li><span class='btn' href=\"javascript:void(0);\" onClick=\"goPage("+(1)+")\">首页</span></li>";
+        tempStr += "<li><span class='btn' href=\"javascript:void(0);\" onClick=\"goPage("+(currentPage-1)+")\">上一页</span></li>"
     }else{
-        tempStr += "<span class='btn'>首页</span>";
-        tempStr += "<span class='btn'>上一页</span>";
+        tempStr += "<li><span class='btn' href=\"javascript:void(0);\">首页</span></li>";
+        tempStr += "<li><span class='btn' href=\"javascript:void(0);\">上一页</span></li>";
     }
 
     for(var pageIndex= 1;pageIndex<totalPage+1;pageIndex++){
-        tempStr += "<a onclick=\"goPage("+pageIndex+")\"><span>"+ pageIndex +"</span></a>";
+        if (pageIndex == currentPage){tempStr += "<li class=\"active\"><span><a onclick=\"goPage("+pageIndex+")\" href=\"javascript:void(0);\" style=\"color: #ffffff;\"><span>"+ pageIndex +"<span class=\"sr-only\">(current)</span></span></a></span></li>";}
+        else {tempStr += "<li><span><a onclick=\"goPage("+pageIndex+")\" href=\"javascript:void(0);\"><span>"+ pageIndex +"</span></a></span></li>";}
     }
 
     if(currentPage<totalPage){
-        tempStr += "<span class='btn' href=\"#\" onClick=\"goPage("+(currentPage+1)+")\">下一页</span>";
-        tempStr += "<span class='btn' href=\"#\" onClick=\"goPage("+(totalPage)+")\">尾页</span>";
+        tempStr += "<li><span class='btn' href=\"javascript:void(0);\" onClick=\"goPage("+(currentPage+1)+")\">下一页</span></li>";
+        tempStr += "<li><span class='btn' href=\"javascript:void(0);\" onClick=\"goPage("+(totalPage)+")\">尾页</span></li>";
     }else{
-        tempStr += "<span class='btn'>下一页</span>";
-        tempStr += "<span class='btn'>尾页</span>";
+        tempStr += "<li><span class='btn' href=\"javascript:void(0);\">下一页</span></li>";
+        tempStr += "<li><span class='btn' href=\"javascript:void(0);\">尾页</span></li>";
     }
 
-    document.getElementById("barcon").innerHTML = tempStr;
+    document.getElementById("barcon").innerHTML = "<ul class='pagination'>"+tempStr+"</ul>";
 
 }
 /*index*/
@@ -271,9 +326,46 @@ function submit_question() {
     /*console.log(question);*/
     $.ajaxSettings.async=false;
     $.post(url,args,function (res) {/*console.log(res);*/ anserJson =res;})
-    console.log(anserJson);
+    /*console.log(anserJson);*/
     anserJson = JSON.parse(anserJson);
-    for(var i=0;i<anserJson.length;i++){answer += "问题："+anserJson[i]["question"] + "?\n答：" + anserJson[i]["answer"] + "\n"}
-    window.alert(answer);
+    /*for(var i=0;i<anserJson.length;i++){answer += "问题："+anserJson[i]["question"] + "?\n答：" + anserJson[i]["answer"] + "\n"}
+    window.alert(answer);*/
     $.ajaxSettings.async=true;
+
+    /*  动态生成表格 ↓  */
+    var tbody = document.querySelector("tbody");
+    var i = 1;
+    var args = {};
+
+    tbody.innerHTML = "";
+    for (var i = 0; i < anserJson.length; i++) {
+        var tr = document.createElement("tr");
+        tbody.appendChild(tr);
+
+        var td = document.createElement("td");
+        tr.appendChild(td);
+        td.innerHTML = "问：" + anserJson[i]["question"] +"?";
+
+        var tr1 = document.createElement("tr");
+        tbody.appendChild(tr1);
+
+        var td = document.createElement("td");
+        tr1.appendChild(td);
+        td.innerHTML = "答：" + anserJson[i].answer;
+    }
+}
+/*table*/
+function altRows(id){
+    if(document.getElementsByTagName){
+        var table = document.getElementById(id);
+        var rows = table.getElementsByTagName("tr");
+
+        for(i = 1; i < rows.length; i++){
+            if(i % 2 == 0){
+                rows[i].className = "evenrowcolor";
+            }else{
+                rows[i].className = "oddrowcolor";
+            }
+        }
+    }
 }
