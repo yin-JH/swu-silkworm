@@ -498,4 +498,8 @@ class SwuChatbotApplicationTests {
 
         System.out.println(userQuestions);
     }
+    @Test
+    void testAskOneQReturn(){
+        System.out.println(askQuestionsService.askOneQUseSearchEngine("怎样除沙"));
+    }
 }

@@ -1,3 +1,7 @@
+function initial() {
+    getNavigation();
+    if (window.location.pathname == "/admin" || window.location.pathname == "/admin/"){get_data_table();hide_btn();}
+}
 function getNavigation() {/* js 生成导航栏 */
     var a = "";
     a = "<nav class=\"navbar navbar-default\">\n" +
@@ -189,10 +193,6 @@ function submit_data(id) {/* 提交修改 */
 function hide_btn() {/*隐藏按钮*/
     if (document.getElementById("input_problem")){console.log("hide:add,display:back"); $("#btn_add").css("display","none");  /*隐藏添加按钮*/  $("#btn_back").css("display","block"); /*显示返回按钮*/} else {console.log("hide:back,display:add"); $("#btn_add").css("display","block"); /*取消隐藏添加按钮*/ $("#btn_back").css("display","none"); /*隐藏返回按钮*/}
 }
-function initial() {
-    getNavigation();
-    if (window.location.pathname == "/admin" || window.location.pathname == "/admin/"){get_data_table();hide_btn();}
-}
 /**
  * 分页函数
  * pno--页数
@@ -255,4 +255,28 @@ function goPage(pno){
 
     document.getElementById("barcon").innerHTML = tempStr;
 
+}
+/*index*/
+function submit_question() {
+    var question = $("#question_box").val();
+    /*window.alert(question.substring(0,question.length-1));*/
+
+    if(question[question.length-1] == "?" || question[question.length-1] == "？"){
+        question = question.substring(0,question.length-1);
+    }
+
+    var url = "/api/v0.01/askOnWeb/askOneQ";
+    var args = {question:question};
+    var anserJson ="";
+    var answer = "";
+
+
+    /*console.log(question);*/
+    $.ajaxSettings.async=false;
+    $.post(url,args,function (res) {/*console.log(res);*/ anserJson =res;})
+    console.log(anserJson);
+    anserJson = JSON.parse(anserJson);
+    for(var i=0;i<anserJson.length;i++){answer += "问题："+anserJson[i]["question"] + "?\n答：" + anserJson[i]["answer"] + "\n"}
+    window.alert(answer);
+    $.ajaxSettings.async=true;
 }
