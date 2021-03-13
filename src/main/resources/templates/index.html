@@ -40,15 +40,28 @@
 
     $("#submit").click(function () {
         var question = $("#question_box").val();
+        /*window.alert(question.substring(0,question.length-1));*/
 
-        var url = "/v0.01/askOnWeb/askOneQ";
+        if(question[question.length-1] == "?" || question[question.length-1] == "？"){
+            question = question.substring(0,question.length-1);
+        }
+
+        var url = "/api/v0.01/askOnWeb/askOneQ";
         var args = {question:question};
+        var anserJson ="";
+        var answer = "";
 
-        console.log(question);
 
-        $.post(url,args,function (res) {
-            console.log(res);
-        })
+        /*console.log(question);*/
+        $.ajaxSettings.async=false;
+        $.post(url,args,function (res) {/*console.log(res);*/ anserJson =res;})
+        console.log(anserJson);
+        anserJson = JSON.parse(anserJson);
+        for(var i=0;i<anserJson.length;i++){answer += "问题："+anserJson[i]["question"] + "?\n答：" + anserJson[i]["answer"] + "\n"}
+        window.alert(answer);
+        $.ajaxSettings.async=true;
+
+
     });
 
 </script>

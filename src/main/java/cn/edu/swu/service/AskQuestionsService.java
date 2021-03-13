@@ -2,14 +2,12 @@ package cn.edu.swu.service;
 
 import cn.edu.swu.entity.Question;
 import cn.edu.swu.mapper.QuestionMapper;
-import cn.edu.swu.utils.MatchUtil;
-import cn.edu.swu.utils.NLPUtil;
-import cn.edu.swu.utils.QuestionsHandler;
-import cn.edu.swu.utils.TermFilter;
+import cn.edu.swu.utils.*;
 import com.hankcs.hanlp.seg.common.Term;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +56,7 @@ public class AskQuestionsService {
      * @param：String question
      * @return：String
      * @throws:
-     * @description: 该方法通过mysql作为数据库进行问题的查找匹配
+     * @description: 该方法通过mysql作为数据库进行问题的查找匹配,检索算法由自己提供
      */
     public String askOneQ(String question){
 
@@ -77,6 +75,35 @@ public class AskQuestionsService {
 
         System.out.println(result);
 
-        return "";
+        //通过UserQuestionUtil来记录
+
+
+        return result.toString();
+    }
+
+    /**
+     * @methodName：askOneQUseSearchEngine
+     * @author: yin
+     * @date: 2021/3/12  11:08
+     * @param：String question
+     * @return：String
+     * @throws: throws IOException
+     * @description: 这个方法是通过Lucene提供的检索工具进行检索
+     */
+    public String askOneQUseSearchEngine(String question) {
+        SearchEngine searchEngine = SearchEngine.getInstance();
+
+        List<Question> results = new ArrayList<>();
+        try {
+            results = searchEngine.search(question);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //记录用户提过的问题
+        Long answerId = results == null ? null : results.get(0).getId();
+        UserQuestionUtil.getInstance().saveUserQuestion(question, answerId);
+
+        return results.toString();
     }
 }

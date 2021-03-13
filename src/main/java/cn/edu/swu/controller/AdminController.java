@@ -3,9 +3,11 @@ package cn.edu.swu.controller;
 import cn.edu.swu.mapper.QuestionMapper;
 import cn.edu.swu.service.AdminService;
 import cn.edu.swu.service.AskQuestionsService;
+import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,11 +36,12 @@ public class AdminController {
     /**
      * 写入功能
      */
-    @RequestMapping("/retrieve")
+    /*@RequestMapping("/retrieve")
     @ResponseBody
-    public String retrieve() {
-        return adminService.itemsRetrieve();
-    }
+    public String retrieve(@RequestParam(name = "pageNum",defaultValue = "1") int pageNum, @RequestParam(name = "pageSize",defaultValue = "10") int pageSize, Model model) {
+        PageInfo pageInfo = adminService.itemsRetrieve(pageNum, pageSize);
+        return "admin";
+    }*/
 
     /*@RequestMapping("/updateData")
     @ResponseBody

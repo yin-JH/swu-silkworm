@@ -96,15 +96,15 @@ public class Question {
 
     @Override
     public String toString() {
-        return "Question{" +
-                "id=" + id +
-                ",flag='"+flag+'\'' +
-                ", type='" + type + '\'' +
-                ", question='" + question + '\'' +
-                ", keywords=" + keywords +
-                ", answer='" + answer + '\'' +
-                ", mediaType='" + mediaType + '\'' +
-                ", originalKeywords='" + originalKeywords + '\'' +
+        return "{" +
+                "\"id\":" + id +
+                ",\"flag\":\""+flag+'\"' +
+                ",\"type\":\"" + type + '\"' +
+                ",\"question\":\"" + question + '\"' +
+                /*",\"keywords\":" + keywords +*/
+                ",\"answer\":\"" + answer + '\"' +
+                ",\"mediaType\":\"" + mediaType + '\"' +
+                /*",\"originalKeywords\":\"" + originalKeywords + '\"' + */
                 '}';
     }
 

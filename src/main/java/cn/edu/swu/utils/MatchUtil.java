@@ -81,6 +81,7 @@ public class MatchUtil {
                 /*System.out.println(windowCount[i]);
                 System.out.println(userQKeywords.size());
                 System.err.println(window[i]);*/
+
                 result.add(window[i]);
             }
         }
