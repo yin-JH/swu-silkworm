@@ -114,13 +114,14 @@ function get_questions_table() {
     var tbody = document.querySelector("tbody");
     var i = 1;
     var str;
-    var url = "/admin/*retrieve";/*接口地址*/
+    var url = "/admin/userQuestionsRetrieve";/*接口地址*/
     var args = {};
 
     tbody.innerHTML="";
     $.ajaxSettings.async=true;
     $.post(url,args,function (res) {
         /*res='{"id"=1,"user_problem"="1111","system_answer"="123456"}',"ask_date":"2021-2-1";*/
+
         str = '['+res+']';
         /*console.log(str);*/
 
@@ -140,7 +141,7 @@ function get_questions_table() {
 
             var td = document.createElement("td");
             tr.appendChild(td);
-            td.innerHTML = obj[i].system_answer;
+            td.innerHTML = obj[i].answer;
 
             var td = document.createElement("td");
             tr.appendChild(td);
@@ -148,8 +149,7 @@ function get_questions_table() {
 
             var td = document.createElement("td");
             tr.appendChild(td);
-            var id = obj[i].id;
-            td.innerHTML = "<button id=" + id + " type=\"button\" onclick=\"edit_answer(id)\" class=\"btn btn-default btn-sm\">编辑回答</button>";
+            td.innerHTML = "<button id=\""+i+1+"\" type=\"button\" onclick=\"edit_answer(id)\" class=\"btn btn-default btn-sm\">编辑回答</button>";
         }
         goPage(1);
         altRows('alternatecolor');
@@ -157,6 +157,60 @@ function get_questions_table() {
 
     $.ajaxSettings.async=false;
     /*  动态生成表格 ↑  */
+}
+function edit_answer(i) {
+
+    var question = document.getElementById("alternatecolor").rows[parseInt(i)].cells[1].innerHTML;
+
+    /*  生成编辑窗口  */
+    var thead = document.querySelector("thead");
+    console.log(thead.innerHTML);
+    thead.innerHTML="<tr>\n" +
+        "            <th>序号</th>\n" +
+        "            <th>问题</th>\n" +
+        "            <th>类型</th>\n" +
+        "            <th>媒体类型</th>\n" +
+        "            <th>回答</th>\n" +
+        "            <th>    </th>\n" +
+        "        </tr>";
+
+    var tbody = document.querySelector("tbody");
+    var obj;
+
+    obj = JSON.parse('[{"id":-1,"problem":"'+question+'","type":"","media_type":"","answer":""}]');
+
+    tbody.innerHTML="";
+    var tr = document.createElement("tr");
+    tbody.appendChild(tr);
+
+    var td = document.createElement("td");
+    tr.appendChild(td);
+    td.innerHTML = 1;
+
+    var td = document.createElement("td");
+    tr.appendChild(td);
+    td.innerHTML = "<div class=\"input-group\">\n                   <input id=\"input_problem\" type=\"text\" class=\"form-control\" value=\""+question+"\" aria-describedby=\"basic-addon1\"> </div>";
+
+    var td = document.createElement("td");
+    tr.appendChild(td);
+    td.innerHTML = "<div class=\"input-group\">\n                   <input id=\"input_type\" type=\"text\" class=\"form-control\" value= \"\" aria-describedby=\"basic-addon1\"> </div>";
+
+    var td = document.createElement("td");
+    tr.appendChild(td);
+    td.innerHTML = "<div class=\"input-group\">\n                   <select id=\"input_media_type\" onchange=\"get_media()\"><option value=\"text\">text</option><option value=\"image\">image</option><option value=\"video\">video</option></select></div>";
+
+    var td = document.createElement("td");
+    tr.appendChild(td);
+    td.innerHTML = "<div class=\"input-group\">\n                   <input id=\"input_answer\" type=\"text\" class=\"form-control\" value=\"\" aria-describedby=\"basic-addon1\"> </div>";
+
+    var td = document.createElement("td");
+    tr.appendChild(td);
+    td.innerHTML = "<button type=\"submit\" onclick=\"submit_data(-1)\" class=\"btn btn-default btn-lg\">提交</button>";
+
+    var nav=document.getElementById("barcon");
+    nav.innerHTML="";
+    get_media();
+
 }
 function edit_one(n) {
     /*  生成编辑窗口  */
@@ -198,20 +252,36 @@ function edit_one(n) {
 
             var td = document.createElement("td");
             tr.appendChild(td);
-            td.innerHTML = "<div class=\"input-group\">\n                   <input id=\"input_media_type\" type=\"text\" class=\"form-control\" value= \""+obj[i].media_type+"\" aria-describedby=\"basic-addon1\"> </div>";
+            td.innerHTML = "<div class=\"input-group\">\n                   <select id=\"input_media_type\" onchange=\"get_media()\"><option value=\"text\">text</option><option value=\"image\">image</option><option value=\"video\">video</option></select></div>";
+            var objmt = document.getElementById("input_media_type")
+            if (obj[i].media_type != ""){for(var i = 0;i<objmt.length;i++){if (objmt[i].value == obj[i].media_type){objmt[i].selected = true;}}}
 
             var td = document.createElement("td");
             tr.appendChild(td);
-            td.innerHTML = "<div class=\"input-group\">\n                   <input id=\"input_answer\" type=\"text\" class=\"form-control\" value=\""+obj[i].answer+"\" aria-describedby=\"basic-addon1\"> </div>";
+            if (obj[i].media_type == "text") {
+                td.innerHTML = "<div class=\"input-group\">\n                   <input id=\"input_answer\" type=\"text\" class=\"form-control\" value=\"" + obj[i].answer + "\" aria-describedby=\"basic-addon1\"> </div>";
+            }
+            else{
+                td.innerHTML = "<div class=\"input-group\">\n                   <input id=\"input_answer\" type=\"file\" class=\"form-control\" name=\"" + obj[i].answer + "\" aria-describedby=\"basic-addon1\"> </div>";
+            }
 
             var td = document.createElement("td");
             tr.appendChild(td);
             var id = obj[i].id;
-            td.innerHTML = "<button id="+id+" type=\"submit\" onclick=\"submit_data(id)\">提交</button>";
+            td.innerHTML = "<button id="+id+" type=\"submit\" onclick=\"submit_data(id)\" class=\"btn btn-default btn-lg\">提交</button>";
 
+            var nav=document.getElementById("barcon");
+            nav.innerHTML="";
+            get_media();
         }
     }
     hide_btn();
+}
+function get_media() {/*根据选择改变输入框类型*/
+    var answerHtml = document.getElementById("input_answer");
+    var mediaType = document.getElementById("input_media_type");
+    /*console.log(mediaType.value)*/
+    if (mediaType.value == "text"){answerHtml.type = "text";}else{answerHtml.type = "file";}
 }
 function delete_one(n) {
     if (window.confirm("确定要删除吗？")==true){

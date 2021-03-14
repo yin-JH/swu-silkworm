@@ -282,7 +282,7 @@ public class AdminService {
         String media_type="";
         String answer="";
 
-        String  sysAnswerJson="";
+        String  sysAnswerJson="\"answer\":\"null";
         String finalJson="";
 
         //获取相应的数据组
@@ -295,15 +295,15 @@ public class AdminService {
                     media_type = loadQuestion.getMediaType();
                     answer = loadQuestion.getAnswer();
 
-                    sysAnswerJson ="{\"type\":\"" + type +
+                    sysAnswerJson ="\"type\":\"" + type +
                             "\",\"media_type\":\"" + media_type +
-                            "\",\"answer\":\"" + answer +
-                            "\"}";
+                            "\",\"answer\":\"" + answer;
                     break;
                 }
             }
             finalJson += "{\"user_problem\":\"" + q.getUserProblem() +
-                    "\",\"sysAnswer\":\"" + sysAnswerJson +
+                    "\"," + sysAnswerJson +
+                    "\",\"ask_date\":\"" + q.getAskDate() +
                     "\"}" + ",";
         }
         int len = finalJson.length();
