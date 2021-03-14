@@ -295,15 +295,14 @@ public class AdminService {
                     media_type = loadQuestion.getMediaType();
                     answer = loadQuestion.getAnswer();
 
-                    sysAnswerJson ="{\"type\":\"" + type +
+                    sysAnswerJson ="\"type\":\"" + type +
                             "\",\"media_type\":\"" + media_type +
-                            "\",\"answer\":\"" + answer +
-                            "\"}";
+                            "\",\"answer\":\"" + answer;
                     break;
                 }
             }
             finalJson += "{\"user_problem\":\"" + q.getUserProblem() +
-                    "\",\"sysAnswer\":\"" + sysAnswerJson +
+                    "\"," + sysAnswerJson +
                     "\"}" + ",";
         }
         int len = finalJson.length();
