@@ -303,6 +303,7 @@ public class AdminService {
             }
             finalJson += "{\"user_problem\":\"" + q.getUserProblem() +
                     "\"," + sysAnswerJson +
+                    "\",\"ask_date\":\"" + q.getAskDate() +
                     "\"}" + ",";
         }
         int len = finalJson.length();
