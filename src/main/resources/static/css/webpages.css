@@ -5,8 +5,44 @@
 .btn_login{margin-left: 45%;}
 /* login页面  ⬆   */
 /* indexPage    ⬇  */
-.submit_btn{margin: 10px 45%;}
+#basic-addon1{font-size: larger;}
+#result{padding-top: 20px;}
 /* indexPage    ⬆   */
+/*  adminPage   ⬇   */
 /* table    ⬇   */
-
+table.altrowstable {
+    width: 70%;
+    margin: 0 auto;
+    margin-top: 5%;
+    font-family: verdana,arial,sans-serif;
+    font-size:11px;
+    color:#333333;
+    border-width: 1px;
+    border-color: #a9c6c9;
+    border-collapse: collapse;
+}
+table.altrowstable th {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #a9c6c9;
+}
+table.altrowstable td {
+    text-align: center;
+    /*display: table-cell;
+    vertical-align: middle;*/
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #a9c6c9;
+}
+.oddrowcolor{
+    background-color: #d4e3e5;
+}
+.evenrowcolor{
+    background-color:#c3dde0;
+}
+table.altrowstable thead tr th{width: 80px;text-align: center;background-color: #31b0d5;}
 /* table    ⬆   */
+/**/
+#barcon{text-align: center;}

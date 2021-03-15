@@ -22,6 +22,7 @@ public class AskQuestionsController {
      * @throws:
      * @description: 这个接口是提供给网页的问答接口，通过该接口可以输入问题，然后后端处理再返回回答的答案
      */
+
     @RequestMapping("askOneQ")
     public String askOneQ(@RequestParam(name = "question") String question){
 

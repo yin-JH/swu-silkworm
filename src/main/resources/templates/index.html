@@ -18,15 +18,13 @@
 <div class="jumbotron">
     <div class="container">
         <div style="width: 50%;margin: 0 auto;">
-            <h3>
-            <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1" >问题</span>
-                <input id="question_box" type="text" class="form-control" placeholder=" " aria-describedby="basic-addon1">
+            <div class="input-group" >
+                <span class="input-group-addon" id="basic-addon1">问题</span>
+                <span><input id="question_box" type="text" class="form-control" placeholder=" " aria-describedby="basic-addon1"></span>
+                <span class="input-group-btn"><button id="submit" class="btn btn-success">提交问题</button></span>
             </div>
-            </h3>
-            <a id="submit" class="submit_btn btn btn-success">提交问题</a>
-            <div>
-                <form id="result" type="text"></form>
+            <div id="result">
+                <table><tbody></tbody></table>
             </div>
         </div>
     </div>
@@ -47,16 +45,40 @@
         var question = $("#question_box").val();
 
         var url = "api/v0.01/askOnWeb/askOneQ";
-        var args = {question:question};
+        var args = {question: question};
         var answer = "";
         /*console.log(question);*/
-        $.ajaxSettings.async=false;
-        $.post(url,args,function (res) {/*console.log(res);*/ anserJson =res;})
-        console.log(anserJson);
+        $.ajaxSettings.async = false;
+        $.post(url, args, function (res) {/*console.log(res);*/
+            anserJson = res;
+        })
+        /*console.log(anserJson);*/
         anserJson = JSON.parse(anserJson);
-        for(var i=0;i<anserJson.length;i++){answer += "问题："+anserJson[i]["question"] + "?\n答：" + anserJson[i]["answer"] + "\n"}
-        window.alert(answer);
-        $.ajaxSettings.async=true;
+        for (var i = 0; i < anserJson.length; i++) {
+            answer += "问题：" + anserJson[i]["question"] + "?\n答：" + anserJson[i]["answer"] + "\n"
+        }
+        /*window.alert(answer);*/
+        /*  动态生成表格 ↓  */
+        var tbody = document.querySelector("tbody");
+        var i = 1;
+        var args = {};
+
+        tbody.innerHTML = "";
+        for (var i = 0; i < anserJson.length; i++) {
+            var tr = document.createElement("tr");
+            tbody.appendChild(tr);
+
+            var td = document.createElement("td");
+            tr.appendChild(td);
+            td.innerHTML = "问：" + anserJson[i]["question"] +"?";
+
+            var tr1 = document.createElement("tr");
+            tbody.appendChild(tr1);
+
+            var td = document.createElement("td");
+            tr1.appendChild(td);
+            td.innerHTML = "答：" + anserJson[i].answer;
+        }
     });
 
 </script>

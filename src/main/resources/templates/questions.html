@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>数据处理</title>
+    <title>问题查看</title>
 
     <link rel="stylesheet" th:href="@{/css/webpages.css}">
     <script th:src="@{/js/webPages.js}" type="text/javascript"></script>
@@ -14,6 +14,7 @@
     <!--<script th:src="@{/js/bootstrap.bundle.min.js}" type="text/javascript"></script>-->
     <style>
         body{background-color: #1ffff0;}
+        table.altrowstable thead tr td{width: 80px;text-align: center;background-color: #449d44;}
     </style>
 </head>
 <body>
@@ -22,20 +23,16 @@
 <div class="navi_bar"></div>
 <!-- 导航栏    ⬆   -->
 
+<!--table ⬇ -->
 <div>
-    <div style="float: left;margin: -4% 15%;"><button type="button" id="btn_back" class="btn btn-default btn-lg">返回</button></div>
-    <div style="float: right;margin: -4% 15%;">
-    <button type="button" onclick="edit_one(-1)" id="btn_add" style="display: block;"class="btn btn-default btn-lg">添加</button></div>
-    <!-- Table -->
     <table class="table altrowstable" id="alternatecolor">
         <thead>
         <tr>
-            <th>序号</th>
-            <th>问题</th>
-            <th>类型</th>
-            <th>媒体类型</th>
-            <th>回答</th>
-            <th>    </th>
+            <td>序号</td>
+            <td>问题</td>
+            <td>回答</td>
+            <td>记录时间</td>
+            <td>    </td>
         </tr>
         </thead>
         <tbody id="idData">
@@ -44,12 +41,10 @@
     </table>
     <nav id="barcon" name="barcon"></nav>
 </div>
-
-
-
-<script type="text/javascript">
-    initial();/*加载……*/
-    $("#btn_back").click(function () {$("#btn_back").css("display","none");initial();});
-</script>
+<!--table ⬆ -->
 </body>
+
+<script>
+    initial();
+</script>
 </html>
