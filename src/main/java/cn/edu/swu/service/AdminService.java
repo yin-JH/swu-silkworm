@@ -282,7 +282,7 @@ public class AdminService {
         String media_type="";
         String answer="";
 
-        String  sysAnswerJson="";
+        String  sysAnswerJson="\"answer\":\"null";
         String finalJson="";
 
         //获取相应的数据组
