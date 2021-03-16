@@ -121,7 +121,7 @@ function get_questions_table() {
     $.ajaxSettings.async=true;
     $.post(url,args,function (res) {
         /*res='{"id"=1,"user_problem"="1111","system_answer"="123456"}',"ask_date":"2021-2-1";*/
-
+        /*console.log(res);*/
         str = '['+res+']';
         /*console.log(str);*/
 
@@ -164,7 +164,7 @@ function edit_answer(i) {
 
     /*  生成编辑窗口  */
     var thead = document.querySelector("thead");
-    console.log(thead.innerHTML);
+    /*console.log(thead.innerHTML);*/
     thead.innerHTML="<tr>\n" +
         "            <th>序号</th>\n" +
         "            <th>问题</th>\n" +
@@ -384,44 +384,45 @@ function goPage(pno){
 /*index*/
 function submit_question() {
     var question = $("#question_box").val();
-    /*window.alert(question.substring(0,question.length-1));*/
-
-    if(question[question.length-1] == "?" || question[question.length-1] == "？"){
-        question = question.substring(0,question.length-1);
-    }
-
+    $("#result").css("display","block");
     var url = "api/v0.01/askOnWeb/askOneQ";
-    var args = {question:question};
+    var args = {question: question};
     var answer = "";
     /*console.log(question);*/
-    $.ajaxSettings.async=false;
-    $.post(url,args,function (res) {/*console.log(res);*/ anserJson =res;})
-    /*console.log(anserJson);*/
+    $.ajaxSettings.async = false;
+    $.post(url, args, function (res) {/*console.log(res);*/
+        anserJson = res;
+    })
+
     anserJson = JSON.parse(anserJson);
-    /*for(var i=0;i<anserJson.length;i++){answer += "问题："+anserJson[i]["question"] + "?\n答：" + anserJson[i]["answer"] + "\n"}
-    window.alert(answer);*/
-    $.ajaxSettings.async=true;
-
-    /*  动态生成表格 ↓  */
-    var tbody = document.querySelector("tbody");
-    var i = 1;
-    var args = {};
-
-    tbody.innerHTML = "";
     for (var i = 0; i < anserJson.length; i++) {
-        var tr = document.createElement("tr");
-        tbody.appendChild(tr);
+        answer += "问题：" + anserJson[i]["question"] + "?\n答：" + anserJson[i]["answer"] + "\n"
+    }
+    /*console.log(anserJson);*/
+    /*window.alert(answer);*/
+    if (anserJson.length ==0){var tbody = document.querySelector("tbody");tbody.innerHTML = "<tr><td>找不到您的问题答案...</td></td></tr>";}
+    else {
+        /*  动态生成表格 ↓  */
+        var tbody = document.querySelector("tbody");
+        var i = 1;
+        var args = {};
 
-        var td = document.createElement("td");
-        tr.appendChild(td);
-        td.innerHTML = "问：" + anserJson[i]["question"] +"?";
+        tbody.innerHTML = "";
+        for (var i = 0; i < anserJson.length; i++) {
+            var tr = document.createElement("tr");
+            tbody.appendChild(tr);
 
-        var tr1 = document.createElement("tr");
-        tbody.appendChild(tr1);
+            var td = document.createElement("td");
+            tr.appendChild(td);
+            td.innerHTML = "问：" + anserJson[i]["question"] + "?";
 
-        var td = document.createElement("td");
-        tr1.appendChild(td);
-        td.innerHTML = "答：" + anserJson[i].answer;
+            var tr1 = document.createElement("tr");
+            tbody.appendChild(tr1);
+
+            var td = document.createElement("td");
+            tr1.appendChild(td);
+            td.innerHTML = "答：" + anserJson[i].answer;
+        }
     }
 }
 /*table*/
