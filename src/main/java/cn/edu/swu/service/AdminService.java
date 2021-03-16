@@ -302,7 +302,7 @@ public class AdminService {
                     break;
                 }
             }
-            finalJson += "{\"user_problem\":\"" + q.getUserProblem() +
+            finalJson += "{\"id\":"+q.getId()+",\"user_problem\":\"" + q.getUserProblem() +
                     "\"," + sysAnswerJson +
                     "\",\"ask_date\":\"" + q.getAskDate() +
                     "\"}" + ",";
