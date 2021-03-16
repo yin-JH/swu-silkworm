@@ -59,6 +59,11 @@ public class AdminController {
                            @RequestParam("type") String type,
                            @RequestParam("media_type") String media_type,
                            @RequestParam("answer") String answer, HttpServletRequest request) {
+        problem = problem.replace("\"","\\\"");
+        System.out.println(problem);
+        answer = answer.replace("\"","\\\"");
+        System.out.println(answer);
+
         Long id = Long.parseLong(strId);
         if (id == -1L) {
             adminService.itemAdd(problem,type,media_type,answer);

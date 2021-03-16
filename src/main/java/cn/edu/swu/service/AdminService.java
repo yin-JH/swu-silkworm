@@ -174,6 +174,7 @@ public class AdminService {
                     q.setQuestion(problem);
                     q.setOriginalKeywords(keywords);
                     q.setType(type);
+                    //if(media_type.equals("image") || media_type.equals())
                     q.setMediaType(media_type);
                     q.setAnswer(answer);
 

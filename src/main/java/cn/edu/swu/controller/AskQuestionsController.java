@@ -25,6 +25,7 @@ public class AskQuestionsController {
 
     @RequestMapping("askOneQ")
     public String askOneQ(@RequestParam(name = "question") String question){
+        question =question.replace("\"","\\\"");
 
         System.out.println(question);
 
