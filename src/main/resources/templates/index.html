@@ -11,11 +11,14 @@
     <script th:src="@{/js/jquery-3.4.1.min.js}" type="text/javascript"></script>
     <script th:src="@{/js/bootstrap.min.js}" type="text/javascript"></script>
     <!--<script th:src="@{/js/bootstrap.bundle.min.js}" type="text/javascript"></script>-->
+    <style type="text/css">
+        body{-moz-background-size:100% 100%;background-size: 100%;background-image: url("/images/th.jpeg");}
+    </style>
 </head>
 <body>
 <div class="navi_bar"></div>
 
-<div class="jumbotron">
+<div class="jumbotron" style="background-color: transparent">
     <div class="container">
         <div style="width: 50%;margin: 0 auto;">
             <div class="input-group" >
@@ -35,7 +38,7 @@
 <script type="text/javascript">
 
     initial();/*加载……*/
-
+    $("#result").css("display","none");
     $(document).bind("keyup",function (event) {
         /*console.log(event.keyCode == 13);*/
         if (event.keyCode == 13){submit_question();}
@@ -43,7 +46,7 @@
 
     $("#submit").click(function () {
         var question = $("#question_box").val();
-
+        $("#result").css("display","block");
         var url = "api/v0.01/askOnWeb/askOneQ";
         var args = {question: question};
         var answer = "";
@@ -52,33 +55,38 @@
         $.post(url, args, function (res) {/*console.log(res);*/
             anserJson = res;
         })
-        /*console.log(anserJson);*/
+
         anserJson = JSON.parse(anserJson);
         for (var i = 0; i < anserJson.length; i++) {
             answer += "问题：" + anserJson[i]["question"] + "?\n答：" + anserJson[i]["answer"] + "\n"
         }
+        /*console.log(anserJson);*/
         /*window.alert(answer);*/
-        /*  动态生成表格 ↓  */
-        var tbody = document.querySelector("tbody");
-        var i = 1;
-        var args = {};
+        if (anserJson.length ==0){var tbody = document.querySelector("tbody");tbody.innerHTML = "<tr><td>找不到您的问题答案...</td></td></tr>";}
+        else {
+            /*  动态生成表格 ↓  */
+            var tbody = document.querySelector("tbody");
+            var i = 1;
+            var args = {};
 
-        tbody.innerHTML = "";
-        for (var i = 0; i < anserJson.length; i++) {
-            var tr = document.createElement("tr");
-            tbody.appendChild(tr);
+            tbody.innerHTML = "";
+            for (var i = 0; i < anserJson.length; i++) {
+                var tr = document.createElement("tr");
+                tbody.appendChild(tr);
 
-            var td = document.createElement("td");
-            tr.appendChild(td);
-            td.innerHTML = "问：" + anserJson[i]["question"] +"?";
+                var td = document.createElement("td");
+                tr.appendChild(td);
+                td.innerHTML = "问：" + anserJson[i]["question"] + "?";
 
-            var tr1 = document.createElement("tr");
-            tbody.appendChild(tr1);
+                var tr1 = document.createElement("tr");
+                tbody.appendChild(tr1);
 
-            var td = document.createElement("td");
-            tr1.appendChild(td);
-            td.innerHTML = "答：" + anserJson[i].answer;
+                var td = document.createElement("td");
+                tr1.appendChild(td);
+                td.innerHTML = "答：" + anserJson[i].answer;
+            }
         }
+
     });
 
 </script>

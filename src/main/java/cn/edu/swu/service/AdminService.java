@@ -174,6 +174,7 @@ public class AdminService {
                     q.setQuestion(problem);
                     q.setOriginalKeywords(keywords);
                     q.setType(type);
+                    //if(media_type.equals("image") || media_type.equals())
                     q.setMediaType(media_type);
                     q.setAnswer(answer);
 
@@ -301,7 +302,7 @@ public class AdminService {
                     break;
                 }
             }
-            finalJson += "{\"user_problem\":\"" + q.getUserProblem() +
+            finalJson += "{\"id\":"+q.getId()+",\"user_problem\":\"" + q.getUserProblem() +
                     "\"," + sysAnswerJson +
                     "\",\"ask_date\":\"" + q.getAskDate() +
                     "\"}" + ",";

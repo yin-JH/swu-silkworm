@@ -62,7 +62,7 @@ function get_data_table() {/* js 表格数据 */
     var args = {};
 
     tbody.innerHTML="";
-    $.ajaxSettings.async=true;
+    $.ajaxSettings.async=false;
     $.post(url,args,function (res) {
         /*res='{"id"=1,"problem"="1111","media_type"="123","answer"="123456"}';*/
         str = '['+res+']';
@@ -104,7 +104,7 @@ function get_data_table() {/* js 表格数据 */
         altRows('alternatecolor');
     });
 
-    $.ajaxSettings.async=false;
+    $.ajaxSettings.async=true;
     /*  动态生成表格 ↑  */
 
     /*hide_btn();*/
@@ -118,10 +118,10 @@ function get_questions_table() {
     var args = {};
 
     tbody.innerHTML="";
-    $.ajaxSettings.async=true;
+    $.ajaxSettings.async=false;
     $.post(url,args,function (res) {
         /*res='{"id"=1,"user_problem"="1111","system_answer"="123456"}',"ask_date":"2021-2-1";*/
-
+        /*console.log(res);*/
         str = '['+res+']';
         /*console.log(str);*/
 
@@ -149,22 +149,31 @@ function get_questions_table() {
 
             var td = document.createElement("td");
             tr.appendChild(td);
-            td.innerHTML = "<button id=\""+i+1+"\" type=\"button\" onclick=\"edit_answer(id)\" class=\"btn btn-default btn-sm\">编辑回答</button>";
+            td.innerHTML = "<button id=\""+obj[i].id+"\" type=\"button\" onclick=\"edit_answer(id)\" class=\"btn btn-default btn-sm\">编辑回答</button>";
         }
         goPage(1);
         altRows('alternatecolor');
     });
 
-    $.ajaxSettings.async=false;
+    $.ajaxSettings.async=true;
     /*  动态生成表格 ↑  */
 }
-function edit_answer(i) {
+function edit_answer(n) {
 
-    var question = document.getElementById("alternatecolor").rows[parseInt(i)].cells[1].innerHTML;
+    var question;
+    var url = "/admin/userQuestionsRetrieve";/*接口地址*/
+    var res;
+    $.ajaxSettings.async=false;
+    $.post(url,{},function (e) {res = '['+e+']';})
+    var obj1 = JSON.parse(res);
+    for (var i = 0;i<obj1.length;i++){
+        if (obj1[i].id == n){question = obj1[i].user_problem;}
+    }
 
+    console.log(question);
     /*  生成编辑窗口  */
     var thead = document.querySelector("thead");
-    console.log(thead.innerHTML);
+    /*console.log(thead.innerHTML);*/
     thead.innerHTML="<tr>\n" +
         "            <th>序号</th>\n" +
         "            <th>问题</th>\n" +
@@ -178,7 +187,7 @@ function edit_answer(i) {
     var obj;
 
     obj = JSON.parse('[{"id":-1,"problem":"'+question+'","type":"","media_type":"","answer":""}]');
-
+    /*console.log(obj);*/
     tbody.innerHTML="";
     var tr = document.createElement("tr");
     tbody.appendChild(tr);
@@ -210,7 +219,7 @@ function edit_answer(i) {
     var nav=document.getElementById("barcon");
     nav.innerHTML="";
     get_media();
-
+    $.ajaxSettings.async=true;
 }
 function edit_one(n) {
     /*  生成编辑窗口  */
@@ -384,44 +393,45 @@ function goPage(pno){
 /*index*/
 function submit_question() {
     var question = $("#question_box").val();
-    /*window.alert(question.substring(0,question.length-1));*/
-
-    if(question[question.length-1] == "?" || question[question.length-1] == "？"){
-        question = question.substring(0,question.length-1);
-    }
-
+    $("#result").css("display","block");
     var url = "api/v0.01/askOnWeb/askOneQ";
-    var args = {question:question};
+    var args = {question: question};
     var answer = "";
     /*console.log(question);*/
+    $.ajaxSettings.async = true;
+    $.post(url, args, function (res) {/*console.log(res);*/
+        anserJson = res;
+    })
     $.ajaxSettings.async=false;
-    $.post(url,args,function (res) {/*console.log(res);*/ anserJson =res;})
-    /*console.log(anserJson);*/
     anserJson = JSON.parse(anserJson);
-    /*for(var i=0;i<anserJson.length;i++){answer += "问题："+anserJson[i]["question"] + "?\n答：" + anserJson[i]["answer"] + "\n"}
-    window.alert(answer);*/
-    $.ajaxSettings.async=true;
-
-    /*  动态生成表格 ↓  */
-    var tbody = document.querySelector("tbody");
-    var i = 1;
-    var args = {};
-
-    tbody.innerHTML = "";
     for (var i = 0; i < anserJson.length; i++) {
-        var tr = document.createElement("tr");
-        tbody.appendChild(tr);
+        answer += "问题：" + anserJson[i]["question"] + "?\n答：" + anserJson[i]["answer"] + "\n"
+    }
+    /*console.log(anserJson);*/
+    /*window.alert(answer);*/
+    if (anserJson.length ==0){var tbody = document.querySelector("tbody");tbody.innerHTML = "<tr><td>找不到您的问题答案...</td></td></tr>";}
+    else {
+        /*  动态生成表格 ↓  */
+        var tbody = document.querySelector("tbody");
+        var i = 1;
+        var args = {};
 
-        var td = document.createElement("td");
-        tr.appendChild(td);
-        td.innerHTML = "问：" + anserJson[i]["question"] +"?";
+        tbody.innerHTML = "";
+        for (var i = 0; i < anserJson.length; i++) {
+            var tr = document.createElement("tr");
+            tbody.appendChild(tr);
 
-        var tr1 = document.createElement("tr");
-        tbody.appendChild(tr1);
+            var td = document.createElement("td");
+            tr.appendChild(td);
+            td.innerHTML = "问：" + anserJson[i]["question"] + "?";
 
-        var td = document.createElement("td");
-        tr1.appendChild(td);
-        td.innerHTML = "答：" + anserJson[i].answer;
+            var tr1 = document.createElement("tr");
+            tbody.appendChild(tr1);
+
+            var td = document.createElement("td");
+            tr1.appendChild(td);
+            td.innerHTML = "答：" + anserJson[i].answer;
+        }
     }
 }
 /*table*/

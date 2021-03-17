@@ -6,12 +6,12 @@
 /* login页面  ⬆   */
 /* indexPage    ⬇  */
 #basic-addon1{font-size: larger;}
-#result{padding-top: 20px;}
+#result{padding-top: 20px;background-color: rgba(255,255,255,0.8)}
 /* indexPage    ⬆   */
 /*  adminPage   ⬇   */
 /* table    ⬇   */
 table.altrowstable {
-    width: 70%;
+    width: 80%;
     margin: 0 auto;
     margin-top: 5%;
     font-family: verdana,arial,sans-serif;
@@ -43,6 +43,50 @@ table.altrowstable td {
     background-color:#c3dde0;
 }
 table.altrowstable thead tr th{width: 80px;text-align: center;background-color: #31b0d5;}
+/**/
+table.custom_tb{
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 5%;
+    border:1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 1px 1px #ccc;
+    border-collapse: separate;
+    border-spacing:0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #444;
+}
+.custom_tb tr:hover{
+    background-color: #fbf8e9;
+    transition: all 0.1s ease-in-out;
+}
+.custom_tb th,.custom_tb td{
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+.custom_tb th{
+    width: 80px;
+    background-color: #dce9f9;
+    border-top:none;
+}
+.custom_tb td:first-child,.custom_tb th:first-child{
+    border-left: none;
+}
+.custom_tb th:first-child{
+    border-radius: 6px 0 0 0;
+}
+.custom_tb th:last-child{
+    border-radius: 0 6px 0 0;
+}
+.custom_tb tr:last-child td:first-child{
+    border-radius: 0 0 0 6px;
+}
+.custom_tb tr:last-child td:last-child{
+    border-radius: 0 0 6px 0;
+}
 /* table    ⬆   */
 /**/
 #barcon{text-align: center;}
