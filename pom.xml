@@ -112,6 +112,17 @@
             <version>1.2.3</version>
         </dependency>
 
+
+
+        <!-- 自己导入的 jar 包 IKAnalyzer -->
+        <dependency>
+            <groupId>cn.edu.swu</groupId>
+            <artifactId>IKAnalyzer-jar</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/IKAnalyzer3.2.3Stable.jar</systemPath>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -19,7 +19,6 @@ import com.hankcs.hanlp.seg.Dijkstra.DijkstraSegment;
 import com.hankcs.hanlp.seg.NShort.NShortSegment;
 import com.hankcs.hanlp.seg.Segment;
 import com.hankcs.hanlp.seg.common.Term;
-import com.hankcs.lucene.HanLPAnalyzer;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
@@ -40,7 +39,7 @@ import java.util.List;
 
 @SpringBootTest
 class  SwuChatbotApplicationTests {
-
+/*
     @Autowired
     QuestionMapper questionMap;
 
@@ -53,7 +52,7 @@ class  SwuChatbotApplicationTests {
     @Autowired
     UserQuestionMapper userQuestionMapper;
 
-    /*@Test
+    *//*@Test
     void contextLoads() throws IOException {
         StringReader reader = new StringReader("5龄蚕吃什么样的桑叶？");
         IKSegmenter ikSegmenter = new IKSegmenter(reader, true);
@@ -64,7 +63,7 @@ class  SwuChatbotApplicationTests {
             System.out.println(lexeme.getLexemeText());
             System.out.println(lexeme.getLexemeTypeString());
         }
-    }*/
+    }*//*
 
     @Test
     void NLPTest() {
@@ -396,7 +395,7 @@ class  SwuChatbotApplicationTests {
         testItemsRetrieve();
     }
 
-    /*@Test
+    *//*@Test
     void testHanlpWithLuncen() throws Exception{
         String text = "中华人民共和国很辽阔";
         for (int i = 0; i < text.length(); ++i)
@@ -419,7 +418,7 @@ class  SwuChatbotApplicationTests {
             TypeAttribute typeAttr = tokenStream.getAttribute(TypeAttribute.class);
             System.out.printf("[%d:%d %d] %s/%s\n", offsetAtt.startOffset(), offsetAtt.endOffset(), positionAttr.getPositionIncrement(), typeAttr.type());
         }
-    }*/
+    }*//*
 
     @Test
     void testLucene(){
@@ -511,5 +510,5 @@ class  SwuChatbotApplicationTests {
     void testGetUserQuestions(){
         String res = adminService.getUserQuestions();
         System.out.println(res);
-    }
+    }*/
 }

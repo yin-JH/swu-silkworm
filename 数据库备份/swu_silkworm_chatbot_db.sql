@@ -61,11 +61,11 @@ CREATE TABLE `user_question` (
   `ask_date` date NOT NULL,
   `flag` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `user_question` */
 
-insert  into `user_question`(`id`,`user_problem`,`system_answer`,`ask_date`,`flag`) values (1,'woshisanbing',2,'2021-03-12',1),(2,'我是伞兵',2,'2021-03-12',1),(3,'独立宣言',2,'2021-03-12',1),(4,'一眼万年',2,'2021-03-12',1),(5,'东百往事',2,'2021-03-12',1),(6,'蚕宝宝有多大',122,'2021-03-12',1);
+insert  into `user_question`(`id`,`user_problem`,`system_answer`,`ask_date`,`flag`) values (1,'woshisanbing',2,'2021-03-12',1),(2,'我是伞兵',2,'2021-03-12',1),(3,'独立宣言',2,'2021-03-12',1),(4,'一眼万年',2,'2021-03-12',1),(5,'东百往事',2,'2021-03-12',1),(6,'蚕宝宝有多大',122,'2021-03-12',1),(7,'ghf',NULL,'2021-03-13',1);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
