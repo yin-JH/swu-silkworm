@@ -104,7 +104,6 @@ public class Question {
                 /*",\"keywords\":" + keywords +*/
                 ",\"answer\":\"" + answer + '\"' +
                 ",\"mediaType\":\"" + mediaType + '\"' +
-                /*",\"originalKeywords\":\"" + originalKeywords + '\"' + */
                 '}';
     }
 
